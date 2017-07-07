@@ -521,3 +521,6 @@ def VSCP_DATACODING_UNIT( b ) :
 def VSCP_DATACODING_INDEX( b ) :
     return ( VSCP_MASK_DATACODING_INDEX & b )
 
+# Use in assignements as 'a = guidarray(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xAA,0x55)'
+guidarray = c_ubyte * 16
+
