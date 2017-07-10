@@ -1,5 +1,7 @@
 # FILE: udp.py
 #
+# VSCP UDP functionality
+#
 # This file is part of the VSCP (http://www.vscp.org)
 #
 # The MIT License (MIT)
@@ -40,7 +42,14 @@ from Crypto import Random
 # Create a VSCP frame
 #
 
-def makeVscpFrame():
+def makeVscpFrame( ptype, e ):
+    
+    # Must be ex version
+    if not isinstance(e,vscpEventEx):
+        raise ValueError('VSCP event must be vscpEventEx not vscpEvent.')
+
+    if e.sizedata > VSCP_LEVEL2_MAXDATA:
+        raise ValueError('VSCP event has data size that is greater than allowed.')
 
     # Create room for possible max frame
     frame = bytearray( 1 + \
@@ -49,75 +58,59 @@ def makeVscpFrame():
                         2 )
 
     # Frame type, Type 0, unencrypted
-    frame[ VSCP_MULTICAST_PACKET0_POS_PKTTYPE ] = 0
+    frame[ VSCP_MULTICAST_PACKET0_POS_PKTTYPE ] = ptype
 
     # Head
-    frame[ VSCP_MULTICAST_PACKET0_POS_HEAD_MSB ] = 0
-    frame[ VSCP_MULTICAST_PACKET0_POS_HEAD_LSB ] = 0
+    frame[ VSCP_MULTICAST_PACKET0_POS_HEAD_MSB ] = ((e.head) >> 8 & 0xff)
+    frame[ VSCP_MULTICAST_PACKET0_POS_HEAD_LSB ] = e.head & 0xff
 
-    # Timestamp
-    frame[ VSCP_MULTICAST_PACKET0_POS_TIMESTAMP ] = 0
-    frame[ VSCP_MULTICAST_PACKET0_POS_TIMESTAMP + 1 ] = 0
-    frame[ VSCP_MULTICAST_PACKET0_POS_TIMESTAMP + 2 ] = 0
-    frame[ VSCP_MULTICAST_PACKET0_POS_TIMESTAMP + 3 ] = 0
+    # Timestamp       
+    frame[ VSCP_MULTICAST_PACKET0_POS_TIMESTAMP ] = ((e.timestamp) >> 24 & 0xff)
+    frame[ VSCP_MULTICAST_PACKET0_POS_TIMESTAMP + 1 ] = ((e.timestamp) >> 8 & 0xff)
+    frame[ VSCP_MULTICAST_PACKET0_POS_TIMESTAMP + 2 ] = ((e.timestamp) >> 8 & 0xff)
+    frame[ VSCP_MULTICAST_PACKET0_POS_TIMESTAMP + 3 ] = e.timestamp & 0xff    
 
     # UTC time
     dt = datetime.datetime.utcnow()
 
-    # Date / time block 1956-11-02 04:23:52 GMT
-    frame[ VSCP_MULTICAST_PACKET0_POS_YEAR_MSB ] = (dt.year >> 8) & 0xff
-    frame[ VSCP_MULTICAST_PACKET0_POS_YEAR_LSB ] = dt.year& 0xff
-    frame[ VSCP_MULTICAST_PACKET0_POS_MONTH ] = dt.month
-    frame[ VSCP_MULTICAST_PACKET0_POS_DAY ] = dt.day
-    frame[ VSCP_MULTICAST_PACKET0_POS_HOUR ] = dt.hour
-    frame[ VSCP_MULTICAST_PACKET0_POS_MINUTE ] = dt.minute
-    frame[ VSCP_MULTICAST_PACKET0_POS_SECOND ] = dt.second
+    # Date / time block GMT
+    if ((0 == e.year) and (0 == e.month) and (0 == e.day) and 
+            (0 == e.hour) and (0 == e.minute) and (0 == e.second)) :
+        frame[ VSCP_MULTICAST_PACKET0_POS_YEAR_MSB ] = ((1900 + dt.year) >> 8) & 0xff
+        frame[ VSCP_MULTICAST_PACKET0_POS_YEAR_LSB ] = (1900 + dt.year) & 0xff
+        frame[ VSCP_MULTICAST_PACKET0_POS_MONTH ] = dt.month
+        frame[ VSCP_MULTICAST_PACKET0_POS_DAY ] = dt.day
+        frame[ VSCP_MULTICAST_PACKET0_POS_HOUR ] = dt.hour
+        frame[ VSCP_MULTICAST_PACKET0_POS_MINUTE ] = dt.minute
+        frame[ VSCP_MULTICAST_PACKET0_POS_SECOND ] = dt.second
+    else:
+        frame[ VSCP_MULTICAST_PACKET0_POS_YEAR_MSB ] = (e.year >> 8) & 0xff
+        frame[ VSCP_MULTICAST_PACKET0_POS_YEAR_LSB ] = e.year & 0xff
+        frame[ VSCP_MULTICAST_PACKET0_POS_MONTH ] = e.month
+        frame[ VSCP_MULTICAST_PACKET0_POS_DAY ] = e.day
+        frame[ VSCP_MULTICAST_PACKET0_POS_HOUR ] = e.hour
+        frame[ VSCP_MULTICAST_PACKET0_POS_MINUTE ] = e.minute
+        frame[ VSCP_MULTICAST_PACKET0_POS_SECOND ] = e.second    
 
-    # Class = 1040 Measurement String
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS_MSB ] = 0x04
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS_LSB ] = 0x10
+    # VSCP Class 
+    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS_MSB ] = (e.vscpclass >> 8) & 0xff
+    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS_LSB ] = e.vscpclass & 0xff
 
-    # Type = Temperature = 6
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE_MSB ] = 0x00
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE_LSB ] = 0x06
+    # VSCP Type 
+    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE_MSB ] = (e.vscptype >> 8) & 0xff
+    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE_LSB ] = e.vscptype & 0xff
 
-    # GUID - dummy
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID ] = 0x00
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 1 ] = 0x01
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 2 ] = 0x02
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 3 ] = 0x03
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 4 ] = 0x04
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 5 ] = 0x05
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 6 ] = 0x06
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 7 ] = 0x07
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 8 ] = 0x08
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 9 ] = 0x09
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 10 ] = 0x0A
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 11 ] = 0x0B
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 12 ] = 0x0C
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 13 ] = 0x0D
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 14 ] = 0x0E
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + 15 ] = 0x0F
+    # GUID 
+    for i in (0,15) :
+        frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_GUID + i ] = e.guid[i]
 
     # Size
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE_MSB ] = 0
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE_LSB ] = 13
+    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE_MSB ] = (e.sizedata >> 8) & 0xff
+    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE_LSB ] = e.sizedata & 0xff
 
-    # Data  Sensor index=2, Zone=1, sunzone2", Unit=1 (Celsius)
-    # Temperature = 123.45678
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA ] = 0x02        # Sensor idx = 2
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 1 ] = 0x01    # Zone = 1
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 2 ] = 0x02    # Subzone = 2
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 3 ] = 0x01    # Unit = 1 Degrees Celsius
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 4 ] = 0x31    # "1"
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 5 ] = 0x32    # "2"
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 6 ] = 0x33    # "3"
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 7 ] = 0x2E    # "."
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 8 ] = 0x34    # "4"
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 9 ] = 0x35    # "5"
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 10 ] = 0x36   # "6"
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 11 ] = 0x37   # "7"
-    frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 12 ] = 0x38   # "8"
+    # Data  
+    for i in (0,e.sizedata) :
+        frame[ VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + i ] = e.data[i]      
 
     # Calculate CRC
     frmstr = ''.join('{:02X}'.format(x) for x in frame[ 1:VSCP_MULTICAST_PACKET0_POS_VSCP_DATA + 13 ] )
@@ -135,6 +128,8 @@ def makeVscpFrame():
 
 ################################################################################
 # Encrypt a VSCP frame with AES128/AES192/AES256
+#
+# Return decrypted frame
 #
 
 def encryptVscpFrame( frame, encryption ):
@@ -159,7 +154,6 @@ def encryptVscpFrame( frame, encryption ):
         prebyte = b"\x03"
     else :
         print "Bad encryption argument - AES128 encryption used."
-
 
     # Frame must be 16 byte aligned for encryption
     while ( len( frame ) - 1 ) % 16:

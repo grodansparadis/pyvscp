@@ -1,5 +1,7 @@
 # FILE: vscp.py
 #
+# General VSCP functionality
+#
 # This file is part of the VSCP (http://www.vscp.org) 
 #
 # The MIT License (MIT)
@@ -30,6 +32,8 @@ import socket
 import sys
 import datetime
 from ctypes import *
+from vscp_class import *
+from vscp_type import *
 
 VSCP_DEFAULT_UDP_PORT =                 33333
 VSCP_DEFAULT_TCP_PORT =                 9598
@@ -84,8 +88,12 @@ VSCP_CAN_ID_HARD_CODED =	            0x02000000 # Hard coded bit in CAN frame id
 VSCP_GUID_MSB =                         0
 VSCP_GUID_LSB =                         15
 
-# VSCP event structure
+# Use in assignements as 'a = guidarray(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xAA,0x55)'
+guidarray = c_ubyte * 16
+
+# VSCP event structure  (!!!!! Use vscpEventEx !!!!!)
 class vscpEvent(Structure):
+
     _fields_ = [("crc", c_ushort),
                 ("obid", c_ulong),
                 ("timestamp", c_ulong),
@@ -99,8 +107,26 @@ class vscpEvent(Structure):
                 ("vscpclass", c_ushort),
                 ("vscptype", c_ushort),
                 ("guid", c_ubyte * 16),
-                ("sizeData", c_ushort),
-                ("pdata", c_void_p)]
+                ("sizedata", c_ushort),
+                ("pdata", c_void_p)]                
+
+    def __init__(self):
+        self.crc = 0
+        self.obid = 0
+        self.timstamp=0
+        self.head =0
+        self.year=0
+        self.month=0
+        self.day=0
+        self.hour=0
+        self.minute=0
+        self.second=0
+        self.vscpclass=0
+        self.vscptype=0
+        for i in (0,15):
+            self.guid[i] = 0
+        self.sizedata = 0
+        self.pdata = None
 
 # VSCP event ex structure
 class vscpEventEx(Structure):
@@ -119,6 +145,25 @@ class vscpEventEx(Structure):
                 ("guid", c_ubyte * 16),
                 ("sizeData", c_ushort),
                 ("data", c_ubyte * VSCP_LEVEL2_MAXDATA)]
+
+    def __init__(self):
+        self.crc = 0
+        self.obid = 0
+        self.timstamp=0
+        self.head =0
+        self.year=0
+        self.month=0
+        self.day=0
+        self.hour=0
+        self.minute=0
+        self.second=0
+        self.vscpclass=0
+        self.vscptype=0
+        for i in (0,15):
+            self.guid[i] = 0
+        self.sizedata = 0
+        for i in (0,VSCP_LEVEL2_MAXDATA-1):
+            self.data[i] = 0
 
 # Event filter
 class vscpEventFilter(Structure):
@@ -521,6 +566,76 @@ def VSCP_DATACODING_UNIT( b ) :
 def VSCP_DATACODING_INDEX( b ) :
     return ( VSCP_MASK_DATACODING_INDEX & b )
 
-# Use in assignements as 'a = guidarray(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xAA,0x55)'
-guidarray = c_ubyte * 16
+
+################################################################################
+# Encapsulate the VSCP GUID
+#
+
+class guid:
+    
+    def __init__(self):
+        self.clear()
+
+    def getArrayFromString(self, guidstr):
+        g = tuple(int(z,16) for z in guidstr.split(':'))
+        return ((c_ubyte * 16)(*g))
+
+    def setFromString(self, guidstr):
+        self.guid = self.getArrayFromString(guidstr)
+
+    def getAsString(self):
+        sa = [format("%02X" % a) for a in self.guid]
+        return ( ":" . join(sa))
+
+    def reverse(self):
+        self.guid = self.guid[::-1]
+
+    def clear(self):
+        self.setFromString("00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00")
+
+    def getAt(self,pos):
+        return self.guid[pos]
+
+    def setAt(self,pos,value):
+        self.guid[pos] = value
+
+    def getLSB(self):
+        return self.guid[15]
+
+    def setLSB(self,value):
+        self.guid[15] = value
+
+    def getNickname(self):
+        return self.guid[15]
+
+    def setNickname(self, value):
+        self.guid[15] = value   
+
+    def getNicknameID(self):
+        return ((self.guid[14]<<8) + self.guid[15])
+
+    def setNicknameID(self,nicknameid):
+        self.guid[14] = ((nicknameid >> 8) & 0xff)
+        self.guid[15] = (nicknameid & 0xff)    
+
+    def getClientID(self):
+        return ((self.guid[12]<<8) + self.guid[13])
+
+    def setClientID(self,clientid):
+        self.guid[12] = ((clientid >> 8) & 0xff)
+        self.guid[13] = (clientid & 0xff)
+
+    def isSame(self,arr):
+        if 16 > len(arr): return False 
+        for i in range(0, 15):
+            if ( self.guid[i] != arr[i] ):
+                return False
+        return True
+
+    def isNULL(self):
+        return (0 == sum(self.guid))
+
+
+
+
 

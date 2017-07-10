@@ -3,72 +3,10 @@ import vscp
 from ctypes import *
 
 
-class guid:
-    
-    def __init__(self):
-        self.clear()
 
-    def getArrayFromString(self, guidstr):
-        g = tuple(int(z,16) for z in guidstr.split(':'))
-        return ((c_ubyte * 16)(*g))
-
-    def setFromString(self, guidstr):
-        self.guid = self.getArrayFromString(guidstr)
-
-    def getAsString(self):
-        sa = [format("%02X" % a) for a in self.guid]
-        return ( ":" . join(sa))
-
-    def reverse(self):
-        self.guid = self.guid[::-1]
-
-    def clear(self):
-        self.setFromString("00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00")
-
-    def getAt(self,pos):
-        return self.guid[pos]
-
-    def setAt(self,pos,value):
-        self.guid[pos] = value
-
-    def getLSB(self):
-        return self.guid[15]
-
-    def setLSB(self,value):
-        self.guid[15] = value
-
-    def getNickname(self):
-        return self.guid[15]
-
-    def setNickname(self, value):
-        self.guid[15] = value   
-
-    def getNicknameID(self):
-        return ((self.guid[14]<<8) + self.guid[15])
-
-    def setNicknameID(self,nicknameid):
-        self.guid[14] = ((nicknameid >> 8) & 0xff)
-        self.guid[15] = (nicknameid & 0xff)    
-
-    def getClientID(self):
-        return ((self.guid[12]<<8) + self.guid[13])
-
-    def setClientID(self,clientid):
-        self.guid[12] = ((clientid >> 8) & 0xff)
-        self.guid[13] = (clientid & 0xff)
-
-    def isSame(self,arr):
-        if 16 > len(arr): return False 
-        for i in range(0, 15):
-            if ( self.guid[i] != arr[i] ):
-                return False
-        return True
-
-    def isNULL(self):
-        return (0 == sum(self.guid))
 
 # GUID conversion
-gg = guid()
+gg = vscp.guid()
 print "After creation:", gg.getAsString()
 
 gg.setFromString("00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF")
