@@ -26,18 +26,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from ctypes import cdll
+import os
+import ctypes 
 import _ctypes
 from vscp import *
 
-lib = cdll.LoadLibrary('libvscphelper.so')
+if os.name == "nt":
+    lib = cdll.LoadLibrary('libvscphelper.dll')
+else:
+    lib = cdll.LoadLibrary('libvscphelper.so')    
 
 ###############################################################################
 # pyvscphlp_newSession
 #
 
 def pyvscphlp_newSession():
-    lib.vscphlp_newSession.restype = c_ulong
+    lib.vscphlp_newSession.restype = ctypes.c_ulong
     handle = lib.vscphlp_newSession()
     return handle
 
@@ -47,7 +51,10 @@ def pyvscphlp_newSession():
 
 def pyvscphlp_closeSession( handle ):
     lib.vscphlp_closeSession( c_ulong(handle) )
-    _ctypes.dlclose(lib._handle)  
+    if os.name == "nt":
+        _ctypes.FreeLibrary(lib1._handle)
+    else:    
+        _ctypes.dlclose(lib._handle)      
 
 ###############################################################################
 # pyvscphlp_setResponseTimeout
@@ -156,6 +163,70 @@ def pyvscphlp_sendEvent(handle,event):
 
 def pyvscphlp_sendEventEx(handle,eventex):    
     rv = lib.vscphlp_sendEventEx( c_ulong(handle), byref(eventex) )
+    return rv 
+
+###############################################################################
+# pyvscphlp_sendEvent
+#
+
+def pyvscphlp_sendEvent(handle,event):    
+    rv = lib.vscphlp_sendEvent( c_ulong(handle), byref(event) )
+    return rv 
+
+###############################################################################
+# pyvscphlp_receiveEvent
+#
+
+def pyvscphlp_receiveEvent(handle,event):    
+    rv = lib.vscphlp_receiveEvent( c_ulong(handle), byref(event) )
+    return rv 
+
+###############################################################################
+# pyvscphlp_receiveEventEx
+#
+
+def pyvscphlp_receiveEventEx(handle,eventex):    
+    rv = lib.vscphlp_receiveEventEx( c_ulong(handle), byref(eventex) )
+    return rv 
+
+###############################################################################
+# pyvscphlp_isDataAvailable
+#
+
+def pyvscphlp_isDataAvailable(handle,cntAvailable):    
+    rv = lib.vscphlp_isDataAvailable( c_ulong(handle), byref(cntAvailable))
+    return rv
+
+###############################################################################
+# pyvscphlp_enterReceiveLoop
+#
+
+def pyvscphlp_enterReceiveLoop(handle):    
+    rv = lib.vscphlp_enterReceiveLoop( c_ulong(handle) )
+    return rv
+
+###############################################################################
+# pyvscphlp_quitReceiveLoop
+#
+
+def pyvscphlp_quitReceiveLoop(handle):    
+    rv = lib.vscphlp_quitReceiveLoop( c_ulong(handle) )
+    return rv
+
+###############################################################################
+# pyvscphlp_blockingReceiveEvent
+#
+
+def pyvscphlp_blockingReceiveEvent(handle,event):    
+    rv = lib.vscphlp_blockingReceiveEvent( c_ulong(handle), byref(event) )
+    return rv 
+
+###############################################################################
+# pyvscphlp_blockingReceiveEventEx
+#
+
+def pyvscphlp_blockingReceiveEventEx(handle,eventex):    
+    rv = lib.vscphlp_blockingReceiveEventEx( c_ulong(handle), byref(eventex) )
     return rv 
 
 ###############################################################################

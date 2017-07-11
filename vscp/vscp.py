@@ -133,18 +133,17 @@ class vscpEventEx(Structure):
     def dump(self):
         print "------------------------------------------------------------------------"
         print "Dump of vscpEventEx content"
-        print "%04d-%02d-%02d %02d:%02d:%02d Timestamp=%08X" % (self.year,self.month, self.day, self.hour, self.minute, self.second, self.timestamp)
-        print "head=%04X class=%d type=%d size=%d" % (self.head, self.vscpclass, self.vscptype, self.sizedata )        
+        print " %04d-%02d-%02d %02d:%02d:%02d UTC Timestamp=%08X" % (self.year,self.month, self.day, self.hour, self.minute, self.second, self.timestamp)
+        print " head=%04X class=%d type=%d size=%d" % (self.head, self.vscpclass, self.vscptype, self.sizedata )        
         if self.sizedata > 0:
-            out = ""
-            for i in (0,self.sizedata+1):
+            out = "Data = "
+            for i in range(0,self.sizedata):
                 out += "%02X " % self.data[i] 
             print out    
         else:
             print "No data."  
         print "crc=%04X obid=%08X" % (self.crc, self.obid)
         print "------------------------------------------------------------------------" 
-
 
 # VSCP event structure  (!!!!! Use vscpEventEx !!!!!)
 class vscpEvent(Structure):
@@ -163,7 +162,7 @@ class vscpEvent(Structure):
                 ("vscptype", c_uint16),
                 ("guid", c_ubyte * 16),
                 ("sizedata", c_uint16),
-                ("pdata", c_void_p)]                
+                ("pdata", POINTER(c_ubyte))]                
 
     def __init__(self):
         self.crc = 0

@@ -27,6 +27,7 @@
 # SOFTWARE.
 
 from vscphelper import *
+import time
 
 h1 = pyvscphlp_newSession()
 if (0 == h1 ):
@@ -39,6 +40,11 @@ if VSCP_ERROR_SUCCESS == rv :
 else:
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_open on channel 1  Error code=%d' % rv )
+
+if ( VSCP_ERROR_SUCCESS == pyvscphlp_isConnected(h1) ):
+    print "CONNECTED!"
+else:
+    print "DISCONNECTED!"    
 
 print "command: noop"
 rv = lib.vscphlp_noop( c_ulong(h1) )
@@ -54,22 +60,7 @@ if VSCP_ERROR_SUCCESS != rv :
 print "Server version = %d.%d.%d" % (v1.value,v2.value,v3.value) 
 
 ex = vscpEventEx()
-print vscpEventEx.crc
-print vscpEventEx.obid
-print vscpEventEx.year
-print vscpEventEx.month
-print vscpEventEx.day
-print vscpEventEx.hour
-print vscpEventEx.minute
-print vscpEventEx.second
-print vscpEventEx.timestamp
-print vscpEventEx.head
-print vscpEventEx.vscpclass
-print vscpEventEx.vscptype
-print vscpEventEx.guid
-print vscpEventEx.sizedata
-print vscpEventEx.data
-#ex.timestamp = 0
+ex.timestamp = 0
 ex.vscpclass = 10
 ex.vscptype = 99
 ex.sizedata = 3
@@ -82,6 +73,68 @@ if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: sendEventEx  Error code=%d' % rv )
 
+e = vscpEvent()
+e.timestamp = 0
+e.vscpclass = 20
+e.vscptype = 9
+e.sizedata = 3
+p = (c_ubyte*3)()
+p[0] = 11
+p[1] = 22
+p[2] = 33
+e.pdata = cast(p, POINTER(c_ubyte))
+
+print "command: sendEvent"
+rv = pyvscphlp_sendEvent(h1,e)
+if VSCP_ERROR_SUCCESS != rv :
+    pyvscphlp_closeSession(h1)
+    raise ValueError('Command error: sendEvent  Error code=%d' % rv )
+e.pdata = None    
+
+print "Waiting for incoming data..."
+
+cntAvailable = ctypes.c_uint(0)
+while cntAvailable.value==0:
+    print 'Still waiting...'
+    time.sleep(1)
+    pyvscphlp_isDataAvailable(h1,cntAvailable)
+
+print '%d event(s) is available' % cntAvailable.value
+
+for i in range(0,cntAvailable.value):
+    ex = vscpEventEx()
+    if VSCP_ERROR_SUCCESS == pyvscphlp_receiveEventEx(h1,ex):
+        ex.dump()
+
+print "Empty VSCP server queue"
+rv = pyvscphlp_clearDaemonEventQueue(h1)
+if VSCP_ERROR_SUCCESS == rv:
+    print "Server queue now is empty"
+else:
+    print "Failed to clear server queue", rv    
+
+print "Enter receive loop. Will lock channel on just receiving events"
+if VSCP_ERROR_SUCCESS == pyvscphlp_enterReceiveLoop(h1):
+    print "Now blocking receive - will take forever if no events is received"
+    
+    rv = -1
+    while VSCP_ERROR_SUCCESS != rv:
+        ex = vscpEventEx()
+        rv = pyvscphlp_blockingReceiveEventEx(h1,ex)
+        if VSCP_ERROR_SUCCESS == rv: 
+            ex.dump()
+        else:
+            if VSCP_ERROR_TIMEOUT != rv:
+                print "Blocking receive failed!", rv 
+                break;
+            print "Waiting in blocking mode"
+    if VSCP_ERROR_SUCCESS == pyvscphlp_quitReceiveLoop(h1):
+        print "Successfully left receive loop"
+    else:
+        print "failed to leave receive loop"    
+else:    
+    print "Failed to enter receive loop!"
+
 print "command: close"
 rv = pyvscphlp_close(h1)
 if VSCP_ERROR_SUCCESS != rv :
@@ -92,5 +145,3 @@ print "command: closeSession"
 pyvscphlp_closeSession(h1)
 
 
-#time.sleep(2)
-#_ctypes.dlclose(lib._handle)
