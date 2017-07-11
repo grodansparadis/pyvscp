@@ -91,23 +91,78 @@ VSCP_GUID_LSB =                         15
 # Use in assignements as 'a = guidarray(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xAA,0x55)'
 guidarray = c_ubyte * 16
 
-# VSCP event structure  (!!!!! Use vscpEventEx !!!!!)
-class vscpEvent(Structure):
-
-    _fields_ = [("crc", c_ushort),
-                ("obid", c_ulong),
-                ("timestamp", c_ulong),
-                ("head", c_ushort),
-                ("year", c_ushort),
+# VSCP event ex structure
+class vscpEventEx(Structure):
+    
+    _fields_ = [("crc", c_uint16),
+                ("obid", c_uint32),                          
+                ("year", c_uint16),
                 ("month", c_ubyte),
                 ("day", c_ubyte),
                 ("hour", c_ubyte),
                 ("minute", c_ubyte),
                 ("second", c_ubyte),
-                ("vscpclass", c_ushort),
-                ("vscptype", c_ushort),
+                ("timestamp", c_uint32),
+                ("head", c_uint16),
+                ("vscpclass", c_uint16),
+                ("vscptype", c_uint16),
                 ("guid", c_ubyte * 16),
-                ("sizedata", c_ushort),
+                ("sizedata", c_uint16),
+                ("data", c_ubyte * VSCP_LEVEL2_MAXDATA)] 
+
+    def __init__(self):
+        self.crc = 0
+        self.obid = 0
+        self.timstamp=0
+        self.head =0
+        dt = datetime.datetime.utcnow()
+        self.year=dt.year
+        self.month=dt.month
+        self.day=dt.day
+        self.hour=dt.hour
+        self.minute=dt.minute
+        self.second=dt.second
+        self.vscpclass=0
+        self.vscptype=0
+        for i in (0,15):
+            self.guid[i] = 0
+        self.sizedata = 0
+        for i in (0,VSCP_LEVEL2_MAXDATA-1):
+            self.data[i] = 0
+
+    def dump(self):
+        print "------------------------------------------------------------------------"
+        print "Dump of vscpEventEx content"
+        print "%04d-%02d-%02d %02d:%02d:%02d Timestamp=%08X" % (self.year,self.month, self.day, self.hour, self.minute, self.second, self.timestamp)
+        print "head=%04X class=%d type=%d size=%d" % (self.head, self.vscpclass, self.vscptype, self.sizedata )        
+        if self.sizedata > 0:
+            out = ""
+            for i in (0,self.sizedata+1):
+                out += "%02X " % self.data[i] 
+            print out    
+        else:
+            print "No data."  
+        print "crc=%04X obid=%08X" % (self.crc, self.obid)
+        print "------------------------------------------------------------------------" 
+
+
+# VSCP event structure  (!!!!! Use vscpEventEx !!!!!)
+class vscpEvent(Structure):
+
+    _fields_ = [("crc", c_uint16),
+                ("obid", c_uint32),                          
+                ("year", c_uint16),
+                ("month", c_ubyte),
+                ("day", c_ubyte),
+                ("hour", c_ubyte),
+                ("minute", c_ubyte),
+                ("second", c_ubyte),
+                ("timestamp", c_uint32),
+                ("head", c_uint16),
+                ("vscpclass", c_uint16),
+                ("vscptype", c_uint16),
+                ("guid", c_ubyte * 16),
+                ("sizedata", c_uint16),
                 ("pdata", c_void_p)]                
 
     def __init__(self):
@@ -128,43 +183,8 @@ class vscpEvent(Structure):
         self.sizedata = 0
         self.pdata = None
 
-# VSCP event ex structure
-class vscpEventEx(Structure):
-    _fields_ = [("crc", c_ushort),
-                ("obid", c_ulong),
-                ("timestamp", c_ulong),
-                ("head", c_ushort),
-                ("year", c_ushort),
-                ("month", c_ubyte),
-                ("day", c_ubyte),
-                ("hour", c_ubyte),
-                ("minute", c_ubyte),
-                ("second", c_ubyte),
-                ("vscpclass", c_ushort),
-                ("vscptype", c_ushort),
-                ("guid", c_ubyte * 16),
-                ("sizeData", c_ushort),
-                ("data", c_ubyte * VSCP_LEVEL2_MAXDATA)]
-
-    def __init__(self):
-        self.crc = 0
-        self.obid = 0
-        self.timstamp=0
-        self.head =0
-        self.year=0
-        self.month=0
-        self.day=0
-        self.hour=0
-        self.minute=0
-        self.second=0
-        self.vscpclass=0
-        self.vscptype=0
-        for i in (0,15):
-            self.guid[i] = 0
-        self.sizedata = 0
-        for i in (0,VSCP_LEVEL2_MAXDATA-1):
-            self.data[i] = 0
-
+               
+   
 # Event filter
 class vscpEventFilter(Structure):
     _fields_ = [("filter_priority", c_ubyte),
@@ -178,23 +198,23 @@ class vscpEventFilter(Structure):
 
 # Transmission statistics structure
 class VSCPStatistics(Structure):
-    _fields_ = [("cntReceiveFrames", c_long),
-                ("cntTransmitFrames", c_long),
-                ("cntReceiveData", c_long),
-                ("cntTransmitData", c_long),
-                ("cntOverruns", c_long),
-                ("x", c_long),
-                ("y", c_long),
-                ("z", c_long) ]
+    _fields_ = [("cntReceiveFrames", c_uint32),
+                ("cntTransmitFrames", c_uint32),
+                ("cntReceiveData", c_uint32),
+                ("cntTransmitData", c_uint32),
+                ("cntOverruns", c_uint32),
+                ("x", c_uint32),
+                ("y", c_uint32),
+                ("z", c_uint32) ]
 
 class VSCPStatus(Structure):
-    _fields_ = [("channel_status", c_ulong),
-                ("lasterrorcode", c_ulong),
-                ("lasterrorsubcode", c_ulong)]
+    _fields_ = [("channel_status", c_uint32),
+                ("lasterrorcode", c_uint32),
+                ("lasterrorsubcode", c_uint32)]
 
 class VSCPChannelInfo(Structure):
     _fields_ = [("channelType", c_ubyte),
-                ("channel", c_ushort),
+                ("channel", c_uint16),
                 ("guid", c_ubyte * 16)]
 
 # VSCP Encryption types
