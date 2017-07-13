@@ -51,10 +51,18 @@ else:
 
 print "------------------------------------------------------------------------"
 print "command: noop"
-rv = lib.vscphlp_noop( c_ulong(h1) )
+rv = lib.vscphlp_noop( h1 )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: ''noop''  Error code=%d' % rv )
+
+print "------------------------------------------------------------------------"
+print "command: pyvscphlp_doCommand"
+command = "NOOP\r\n"
+rv = pyvscphlp_doCommand( h1, command )
+if VSCP_ERROR_SUCCESS != rv :
+    pyvscphlp_closeSession(h1)
+    raise ValueError('Command error: ''pyvscphlp_doCommand''  Error code=%d' % rv )    
 
 print "------------------------------------------------------------------------"
 print "command: Get sever version"
@@ -77,7 +85,8 @@ print "command: sendEventEx"
 rv = pyvscphlp_sendEventEx(h1,ex)
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
-    raise ValueError('Command error: sendEventEx  Error code=%d' % rv )
+    raise V== Example (c/c++) ==
+<code="c">alueError('Command error: sendEventEx  Error code=%d' % rv )
 
 e = vscpEvent()
 e.timestamp = 0
@@ -230,6 +239,24 @@ if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_getStatus  Error code=%d' % rv )
 print "DLL version = %d" % dllversion.value
+
+# Get vendor string
+print "------------------------------------------------------------------------"
+print "Get vendor string"
+(rv,strvendor) = pyvscphlp_getVendorString( h1 )
+if VSCP_ERROR_SUCCESS != rv :
+    pyvscphlp_closeSession(h1)
+    raise ValueError('Command error: pyvscphlp_getVendorString  Error code=%d' % rv )
+print "Vendor string = %s" % strvendor
+
+# Get driver info string
+print "------------------------------------------------------------------------"
+print "Get driver info string"
+(rv,strdriverinfo) = pyvscphlp_getDriverInfo( h1 )
+if VSCP_ERROR_SUCCESS != rv :
+    pyvscphlp_closeSession(h1)
+    raise ValueError('Command error: pyvscphlp_getDriverInfo  Error code=%d' % rv )
+print "Driver info string = %s" % strdriverinfo
 
 print "------------------------------------------------------------------------"
 print "command: close"

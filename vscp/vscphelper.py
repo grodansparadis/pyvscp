@@ -273,3 +273,28 @@ def pyvscphlp_getDLLVersion(handle):
     rv = lib.vscphlp_getDLLVersion( c_ulong(handle), byref( dllversion ) )
     return (rv,dllversion )
 
+###############################################################################
+# pyvscphlp_getVendorString
+#
+
+def pyvscphlp_getVendorString(handle):
+    strvendor = create_string_buffer(b'\000' * 80)
+    rv = lib.vscphlp_getVendorString( c_ulong(handle), strvendor, c_size_t( 80 ) )
+    return (rv,repr(strvendor.value) )
+
+###############################################################################
+# pyvscphlp_getDriverInfo
+#
+
+def pyvscphlp_getDriverInfo(handle):
+    strdrvinfo = create_string_buffer(b'\000' * 32000)
+    rv = lib.vscphlp_getDriverInfo( c_ulong(handle), strdrvinfo, c_size_t( 32000 ) )
+    return (rv,repr(strdrvinfo.value) )
+
+###############################################################################
+# pyvscphlp_vscphlp_serverShutDown
+#
+
+def pyvscphlp_vscphlp_serverShutDown(handle):
+    rv = lib.vscphlp_vscphlp_serverShutDown( c_ulong(handle)  )
+    return rv 
