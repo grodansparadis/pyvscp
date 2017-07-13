@@ -217,16 +217,40 @@ def pyvscphlp_quitReceiveLoop(handle):
 # pyvscphlp_blockingReceiveEvent
 #
 
-def pyvscphlp_blockingReceiveEvent(handle,event):    
-    rv = lib.vscphlp_blockingReceiveEvent( c_ulong(handle), byref(event) )
+def pyvscphlp_blockingReceiveEvent( handle, event, timeout):    
+    rv = lib.vscphlp_blockingReceiveEvent( c_ulong(handle), byref(event), c_ulong(timeout) )
     return rv 
 
 ###############################################################################
 # pyvscphlp_blockingReceiveEventEx
 #
 
-def pyvscphlp_blockingReceiveEventEx(handle,eventex):    
-    rv = lib.vscphlp_blockingReceiveEventEx( c_ulong(handle), byref(eventex) )
+def pyvscphlp_blockingReceiveEventEx( handle, eventex, timeout ):    
+    rv = lib.vscphlp_blockingReceiveEventEx( c_ulong(handle), byref(eventex), c_ulong(timeout) )
+    return rv 
+
+###############################################################################
+# pyvscphlp_setStatistics
+#
+
+def pyvscphlp_getStatistics( handle, statistics ):    
+    rv = lib.vscphlp_getStatistics( c_ulong(handle), byref(statistics) )
+    return rv 
+
+###############################################################################
+# pyvscphlp_setStatus
+#
+
+def pyvscphlp_getStatus( handle, status ):    
+    rv = lib.vscphlp_getStatus( c_ulong(handle), byref(status) )
+    return rv
+
+###############################################################################
+# pyvscphlp_setFilter
+#
+
+def pyvscphlp_setFilter( handle, filter ):    
+    rv = lib.vscphlp_setFilter( c_ulong(handle), byref(filter) )
     return rv 
 
 ###############################################################################
@@ -240,5 +264,12 @@ def pyvscphlp_getVersion(handle):
     rv = lib.vscphlp_getVersion( c_ulong(handle), byref(v1), byref(v2), byref(v3) )
     return (rv,v1,v2,v3)
 
+###############################################################################
+# pyvscphlp_getDLLVersion
+#
 
+def pyvscphlp_getDLLVersion(handle):
+    dllversion = c_ulong()
+    rv = lib.vscphlp_getDLLVersion( c_ulong(handle), byref( dllversion ) )
+    return (rv,dllversion )
 

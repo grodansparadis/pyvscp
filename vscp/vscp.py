@@ -184,37 +184,89 @@ class vscpEvent(Structure):
 
                
    
-# Event filter
+# Receiving event filter
 class vscpEventFilter(Structure):
     _fields_ = [("filter_priority", c_ubyte),
                 ("mask_priority", c_ubyte),
-                ("filter_class", c_ubyte),
-                ("mask_class", c_ubyte),
-                ("filter_type", c_ubyte),
-                ("mask_type", c_ubyte),
+                ("filter_class", c_ushort),
+                ("mask_class", c_ushort),
+                ("filter_type", c_ushort),
+                ("mask_type", c_ushort),
                 ("filter_guid", c_ubyte * 16),
                 ("mask_guid", c_ubyte * 16) ]
 
+    def __init__(self):
+        self.filter_priority = 0
+        self.mask_priority = 0
+        self.filter_class = 0
+        self.mask_class = 0
+        self.filter_type = 0
+        self.mask_type = 0
+        for i in (0,15):
+            self.filter_guid[i] = 0
+        for i in (0,15):
+            self.mask_guid[i] = 0
+
+    def clear(self):
+        self.filter_priority = 0
+        self.mask_priority = 0
+        self.filter_class = 0
+        self.mask_class = 0
+        self.filter_type = 0
+        self.mask_type = 0
+        for i in (0,15):
+            self.filter_guid[i] = 0
+        for i in (0,15):
+            self.mask_guid[i] = 0
+
 # Transmission statistics structure
 class VSCPStatistics(Structure):
-    _fields_ = [("cntReceiveFrames", c_uint32),
-                ("cntTransmitFrames", c_uint32),
-                ("cntReceiveData", c_uint32),
-                ("cntTransmitData", c_uint32),
-                ("cntOverruns", c_uint32),
-                ("x", c_uint32),
-                ("y", c_uint32),
-                ("z", c_uint32) ]
+    _fields_ = [("cntReceiveFrames", c_ulong),
+                ("cntTransmitFrames", c_ulong),
+                ("cntReceiveData", c_ulong),
+                ("cntTransmitData", c_ulong),
+                ("cntOverruns", c_ulong),
+                ("x", c_ulong),    # Placeholder
+                ("y", c_ulong),    # Placeholder
+                ("z", c_ulong) ]   # Placeholder
 
+    def __init__(self):
+        self.cntReceiveFrames = 0
+        self.cntTransmitFrames = 0
+        self.cntReceiveData = 0
+        self.cntTransmitData = 0
+        self.cntOverruns = 0
+        self.x = 0
+        self.y = 0
+        self.z = 0
+
+VSCP_STATUS_ERROR_STRING_SIZE                 =  80
+
+# Communication channel status
 class VSCPStatus(Structure):
-    _fields_ = [("channel_status", c_uint32),
-                ("lasterrorcode", c_uint32),
-                ("lasterrorsubcode", c_uint32)]
+    _fields_ = [("channel_status", c_ulong),
+                ("lasterrorcode", c_ulong),
+                ("lasterrorsubcode", c_ulong),
+                ("lasterrorstr", c_ubyte * VSCP_STATUS_ERROR_STRING_SIZE)]
 
+    def __init__(self):
+        self.channel_status = 0
+        self.lasterrorcode = 0
+        self.lasterrorsubcode = 0
+        for i in (0,VSCP_STATUS_ERROR_STRING_SIZE-1):
+            self.lasterrorstr[i] = 0
+
+# Communication channel info
 class VSCPChannelInfo(Structure):
     _fields_ = [("channelType", c_ubyte),
-                ("channel", c_uint16),
+                ("channel", c_ushort),
                 ("guid", c_ubyte * 16)]
+
+    def __init__(self):
+        self.channelType = 0                        
+        self.channel = 0
+        for i in (0,15):
+            self.guid[i] = 0
 
 # VSCP Encryption types
 VSCP_ENCRYPTION_NONE =                  0
@@ -231,38 +283,38 @@ VSCP_ENCRYPTION_TOKEN_3 =               "AES256"
 # Packet frame format type = 0
 #      without byte0 and CRC
 #      total frame size is 1 + 34 + 2 + data-length
-VSCP_MULTICAST_PACKET0_HEADER_LENGTH =  35
+VSCP_MULTICAST_PACKET0_HEADER_LENGTH =      35
 
 # Multicast packet ordinals
-VSCP_MULTICAST_PACKET0_POS_PKTTYPE = 0
-VSCP_MULTICAST_PACKET0_POS_HEAD = 1
-VSCP_MULTICAST_PACKET0_POS_HEAD_MSB = 1
-VSCP_MULTICAST_PACKET0_POS_HEAD_LSB = 2
-VSCP_MULTICAST_PACKET0_POS_TIMESTAMP = 3
-VSCP_MULTICAST_PACKET0_POS_YEAR = 7
-VSCP_MULTICAST_PACKET0_POS_YEAR_MSB = 7
-VSCP_MULTICAST_PACKET0_POS_YEAR_LSB = 8
-VSCP_MULTICAST_PACKET0_POS_MONTH = 9
-VSCP_MULTICAST_PACKET0_POS_DAY = 10
-VSCP_MULTICAST_PACKET0_POS_HOUR = 11
-VSCP_MULTICAST_PACKET0_POS_MINUTE = 12
-VSCP_MULTICAST_PACKET0_POS_SECOND = 13
-VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS = 14
-VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS_MSB = 14
-VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS_LSB = 15
-VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE = 16
-VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE_MSB = 16
-VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE_LSB = 17
-VSCP_MULTICAST_PACKET0_POS_VSCP_GUID = 18
-VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE = 34
-VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE_MSB = 34
-VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE_LSB = 35
-VSCP_MULTICAST_PACKET0_POS_VSCP_DATA = 36
+VSCP_MULTICAST_PACKET0_POS_PKTTYPE          = 0
+VSCP_MULTICAST_PACKET0_POS_HEAD             = 1
+VSCP_MULTICAST_PACKET0_POS_HEAD_MSB         = 1
+VSCP_MULTICAST_PACKET0_POS_HEAD_LSB         = 2
+VSCP_MULTICAST_PACKET0_POS_TIMESTAMP        = 3
+VSCP_MULTICAST_PACKET0_POS_YEAR             = 7
+VSCP_MULTICAST_PACKET0_POS_YEAR_MSB         = 7
+VSCP_MULTICAST_PACKET0_POS_YEAR_LSB         = 8
+VSCP_MULTICAST_PACKET0_POS_MONTH            = 9
+VSCP_MULTICAST_PACKET0_POS_DAY              = 10
+VSCP_MULTICAST_PACKET0_POS_HOUR             = 11
+VSCP_MULTICAST_PACKET0_POS_MINUTE           = 12
+VSCP_MULTICAST_PACKET0_POS_SECOND           = 13
+VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS       = 14
+VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS_MSB   = 14
+VSCP_MULTICAST_PACKET0_POS_VSCP_CLASS_LSB   = 15
+VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE        = 16
+VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE_MSB    = 16
+VSCP_MULTICAST_PACKET0_POS_VSCP_TYPE_LSB    = 17
+VSCP_MULTICAST_PACKET0_POS_VSCP_GUID        = 18
+VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE        = 34
+VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE_MSB    = 34
+VSCP_MULTICAST_PACKET0_POS_VSCP_SIZE_LSB    = 35
+VSCP_MULTICAST_PACKET0_POS_VSCP_DATA        = 36
 # Two byte CRC follow here and if the frame is encrypted
 # the initialization vector follows.
 
 # VSCP multicast packet types
-VSCP_MULTICAST_TYPE_EVENT = 0
+VSCP_MULTICAST_TYPE_EVENT                   = 0
 
 # Multicast proxy CLASS=1026, TYPE=3 http://www.vscp.org/docs/vscpspec/doku.php?id=class2.information#type_3_0x0003_level_ii_proxy_node_heartbeat
 VSCP_MULTICAST_PROXY_HEARTBEAT_DATA_SIZE      =     192
