@@ -85,8 +85,7 @@ print "command: sendEventEx"
 rv = pyvscphlp_sendEventEx(h1,ex)
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
-    raise V== Example (c/c++) ==
-<code="c">alueError('Command error: sendEventEx  Error code=%d' % rv )
+    raise ValueError('Command error: sendEventEx  Error code=%d' % rv )
 
 e = vscpEvent()
 e.timestamp = 0
