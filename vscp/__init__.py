@@ -25,6 +25,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+__all__ = ["vscp", "vscp_class", "vscp_type", "udp", "tcp", "vscphelper"]
 from vscp import *
 
 __author__ = 'Ake Hedman'

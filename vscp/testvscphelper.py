@@ -37,7 +37,7 @@ if (0 == h1 ):
 
 print "------------------------------------------------------------------------"
 print "\n\nConnection in progress..."
-rv = pyvscphlp_open(h1,"127.0.0.1:9598","admin","secret")
+rv = pyvscphlp_open(h1,"199.0.0.1:9598","admin","secret")
 if VSCP_ERROR_SUCCESS == rv :
     print "Command success: pyvscphlp_open on channel 1"
 else:
