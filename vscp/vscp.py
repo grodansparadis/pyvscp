@@ -6,7 +6,7 @@
 #
 # The MIT License (MIT)
 # 
-# Copyright (c) 2000-2017 Ake Hedman, Grodans Paradis AB <info@grodansparadis.com>
+# Copyright (c) 2000-2018 Ake Hedman, Grodans Paradis AB <info@grodansparadis.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -76,7 +76,7 @@ VSCP_MASK_HARDCODED =                   0x10
 VSCP_MASK_NOCRCCALC =                   0x08
 
 VSCP_LEVEL1_MAXDATA =                   8
-VSCP_LEVEL2_MAXDATA =                   (512 - 25)
+VSCP_LEVEL2_MAXDATA =                   512
 
 VSCP_NOCRC_CALC_DUMMY_CRC =             0xAA55  # If no CRC cal bit is set the CRC value
                                                 # should be set to this value for the CRC

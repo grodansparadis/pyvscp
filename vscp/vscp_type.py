@@ -4,7 +4,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2000-2017 Ake Hedman, 
+# Copyright (c) 2000-2018 Ake Hedman, 
 # Grodans Paradis AB <info@grodansparadis.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -270,6 +270,8 @@ VSCP_TYPE_INFORMATION_DOUBLE_CLICK                  = 71
 VSCP_TYPE_INFORMATION_DATE                          = 72
 VSCP_TYPE_INFORMATION_TIME                          = 73
 VSCP_TYPE_INFORMATION_WEEKDAY                       = 74
+VSCP_TYPE_INFORMATION_LOCK                          = 75
+VSCP_TYPE_INFORMATION_UNLOCK                        = 76
 
 # class 30 (0x1E) -- CONTROL
 VSCP_TYPE_CONTROL_GENERAL                           = 0
