@@ -272,6 +272,7 @@ VSCP_TYPE_INFORMATION_TIME                          = 73
 VSCP_TYPE_INFORMATION_WEEKDAY                       = 74
 VSCP_TYPE_INFORMATION_LOCK                          = 75
 VSCP_TYPE_INFORMATION_UNLOCK                        = 76
+VSCP_TYPE_INFORMATION_DATETIME                      = 77
 
 # class 30 (0x1E) -- CONTROL
 VSCP_TYPE_CONTROL_GENERAL                           = 0
