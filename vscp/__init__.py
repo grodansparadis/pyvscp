@@ -34,4 +34,4 @@ from udp import *
 from multicast import *
 __author__ = 'Ake Hedman'
 __email__ = 'akhe@grodansparadis.com'
-__version__ = '0.1.4'
+__version__ = '0.1.5'
