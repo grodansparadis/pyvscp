@@ -19,22 +19,42 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2019-10-18 09:04:12.627990
+#                        Generated: 2019-11-01 13:27:26.303863
 #
  
 CLASS1_PROTOCOL                          = 0      # VSCP Protocol Functionality
 CLASS1_ALARM                             = 1      # Alarm functionality
 CLASS1_SECURITY                          = 2      # Security
 CLASS1_MEASUREMENT                       = 10     # Measurement
+CLASS1_MEASUREMENTX1                     = 11     # Measurement
+CLASS1_MEASUREMENTX2                     = 12     # Measurement
+CLASS1_MEASUREMENTX3                     = 13     # Measurement
+CLASS1_MEASUREMENTX4                     = 14     # Measurement
 CLASS1_DATA                              = 15     # Data
 CLASS1_INFORMATION                       = 20     # Information
 CLASS1_CONTROL                           = 30     # Control
 CLASS1_MULTIMEDIA                        = 40     # Multimedia
 CLASS1_AOL                               = 50     # Alert On LAN
 CLASS1_MEASUREMENT64                     = 60     # Double precision floating point measurement
+CLASS1_MEASUREMENT64X1                   = 61     # Double precision floating point measurement
+CLASS1_MEASUREMENT64X2                   = 62     # Double precision floating point measurement
+CLASS1_MEASUREMENT64X3                   = 63     # Double precision floating point measurement
+CLASS1_MEASUREMENT64X4                   = 64     # Double precision floating point measurement
 CLASS1_MEASUREZONE                       = 65     # Measurement with zone
+CLASS1_MEASUREZONEX1                     = 66     # Measurement with zone
+CLASS1_MEASUREZONEX2                     = 67     # Measurement with zone
+CLASS1_MEASUREZONEX3                     = 68     # Measurement with zone
+CLASS1_MEASUREZONEX4                     = 69     # Measurement with zone
 CLASS1_MEASUREMENT32                     = 70     # Single precision floating point measurement
+CLASS1_MEASUREMENT32X1                   = 71     # Single precision floating point measurement
+CLASS1_MEASUREMENT32X2                   = 72     # Single precision floating point measurement
+CLASS1_MEASUREMENT32X3                   = 73     # Single precision floating point measurement
+CLASS1_MEASUREMENT32X4                   = 74     # Single precision floating point measurement
 CLASS1_SETVALUEZONE                      = 85     # Set value with zone
+CLASS1_SETVALUEZONEX1                    = 86     # Set value with zone
+CLASS1_SETVALUEZONEX2                    = 87     # Set value with zone
+CLASS1_SETVALUEZONEX3                    = 88     # Set value with zone
+CLASS1_SETVALUEZONEX4                    = 89     # Set value with zone
 CLASS1_WEATHER                           = 90     # Weather
 CLASS1_WEATHER_FORECAST                  = 95     # Weather forecast
 CLASS1_PHONE                             = 100    # Phone
