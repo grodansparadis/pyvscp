@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2019-11-01 13:27:36.006493
+#                        Generated: 2019-11-01 15:02:33.379804
 #
  
  
@@ -838,11 +838,11 @@ VSCP2_TYPE_VSCPD_TIMER_RESUMED                       = 27 # Timer resumed
 VSCP2_TYPE_VSCPD_TIMER_STOPPED                       = 28 # Timer stopped
 VSCP2_TYPE_VSCPD_TIMER_ELLAPSED                      = 29 # Timer Elapsed
 VSCP2_TYPE_VSCPD_NEW_CALCULATION                     = 30 # New Calculations
-VSCP2_TYPE_VSCPD_START                               = 31 # Start
-VSCP2_TYPE_VSCPD_STOP                                = 32 # Stop
-VSCP2_TYPE_VSCPD_PAUSE                               = 33 # Pause
-VSCP2_TYPE_VSCPD_RESUME                              = 34 # Resume
-VSCP2_TYPE_VSCPD_RESTART                             = 35 # Restart
-VSCP2_TYPE_VSCPD_CONFIG                              = 36 # Config
+VSCP2_TYPE_VSCPD_DRV3_START                          = 31 # Start
+VSCP2_TYPE_VSCPD_DRV3_STOP                           = 32 # Stop
+VSCP2_TYPE_VSCPD_DRV3_PAUSE                          = 33 # Pause
+VSCP2_TYPE_VSCPD_DRV3_RESUME                         = 34 # Resume
+VSCP2_TYPE_VSCPD_DRV3_RESTART                        = 35 # Restart
+VSCP2_TYPE_VSCPD_DRV3_CONFIG                         = 36 # Config
  
  
