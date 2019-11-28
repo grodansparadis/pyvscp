@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2019-11-27 10:24:45.179208
+#                        Generated: 2019-11-28 23:05:22.215943
 #
  
  
@@ -290,6 +290,9 @@ VSCP_TYPE_INFORMATION_DATETIME                       = 77 # DateTime
 VSCP_TYPE_INFORMATION_RISING                         = 78 # Rising
 VSCP_TYPE_INFORMATION_FALLING                        = 79 # Falling
 VSCP_TYPE_INFORMATION_UPDATED                        = 80 # Updated
+VSCP_TYPE_INFORMATION_CONNECT                        = 81 # Connect
+VSCP_TYPE_INFORMATION_DISCONNECT                     = 82 # Disconnect
+VSCP_TYPE_INFORMATION_RECONNECT                      = 83 # Reconnect
 
 #  CLASS1.CONTROL = 30  -  Control
 VSCP_TYPE_CONTROL_GENERAL                            = 0 # General event
