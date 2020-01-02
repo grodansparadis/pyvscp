@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2019-11-28 23:05:22.215943
+#                        Generated: 2020-01-02 17:51:01.094806
 #
  
  
@@ -784,7 +784,6 @@ VSCP2_TYPE_PROTOCOL_WRITE_REGISTER                   = 2 # Write Register
 VSCP2_TYPE_PROTOCOL_READ_WRITE_RESPONSE              = 3 # Read Write Response
 VSCP2_TYPE_PROTOCOL_HIGH_END_SERVER_CAPS             = 20 # High end server/service capabilities
 VSCP2_TYPE_PROTOCOL_WHO_IS_THERE_RESPONSE            = 32 # Level II who is there response
-VSCP2_TYPE_PROTOCOL_HIGH_LEVEL_OBJECT                = 42 # High Level Object
 
 #  CLASS2.CONTROL = 1025  -  Level II Control
 VSCP2_TYPE_CONTROL_GENERAL                           = 0 # General event
