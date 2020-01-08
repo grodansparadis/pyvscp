@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2020-01-02 17:51:00.551883
+#                        Generated: 2020-01-02 18:31:06.376586
 #
  
 CLASS1_PROTOCOL                          = 0      # VSCP Protocol Functionality
@@ -96,6 +96,7 @@ CLASS2_PROTOCOL                          = 1024   # Level II Protocol Functional
 CLASS2_CONTROL                           = 1025   # Level II Control
 CLASS2_INFORMATION                       = 1026   # Level II Information
 CLASS2_TEXT2SPEECH                       = 1027   # Text to speech
+CLASS2_HLO                               = 1028   # High Level Object
 CLASS2_CUSTOM                            = 1029   # Level II Custom
 CLASS2_DISPLAY                           = 1030   # Level II Display
 CLASS2_MEASUREMENT_STR                   = 1040   # Measurement string

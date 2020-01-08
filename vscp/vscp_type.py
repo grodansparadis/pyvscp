@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2020-01-02 17:51:01.094806
+#                        Generated: 2020-01-02 18:31:06.931798
 #
  
  
@@ -798,6 +798,11 @@ VSCP2_TYPE_INFORMATION_CHANNEL_ANNOUNCE              = 4 # Level II Multicast ch
 #  CLASS2.TEXT2SPEECH = 1027  -  Text to speech
 VSCP2_TYPE_TEXT2SPEECH_GENERAL                       = 0 # General event
 VSCP2_TYPE_TEXT2SPEECH_TALK                          = 1 # Talk
+
+#  CLASS2.HLO = 1028  -  High Level Object
+VSCP2_TYPE_HLO_GENERAL                               = 0 # General event
+VSCP2_TYPE_HLO_COMMAND                               = 1 # HLO Command
+VSCP2_TYPE_HLO_RESPONSE                              = 2 # HLO Response
 
 #  CLASS2.CUSTOM = 1029  -  Level II Custom
 VSCP2_TYPE_CUSTOM_GENERAL                            = 0 # General event
