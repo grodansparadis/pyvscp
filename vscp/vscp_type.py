@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2020-01-02 18:31:06.931798
+#                        Generated: 2020-03-25 16:54:48.323908
 #
  
  
@@ -293,6 +293,8 @@ VSCP_TYPE_INFORMATION_UPDATED                        = 80 # Updated
 VSCP_TYPE_INFORMATION_CONNECT                        = 81 # Connect
 VSCP_TYPE_INFORMATION_DISCONNECT                     = 82 # Disconnect
 VSCP_TYPE_INFORMATION_RECONNECT                      = 83 # Reconnect
+VSCP_TYPE_INFORMATION_ENTER                          = 84 # Enter
+VSCP_TYPE_INFORMATION_EXIT                           = 85 # Exit
 
 #  CLASS1.CONTROL = 30  -  Control
 VSCP_TYPE_CONTROL_GENERAL                            = 0 # General event
@@ -821,36 +823,13 @@ VSCP2_TYPE_VSCPD_GENERAL                             = 0 # General event
 VSCP2_TYPE_VSCPD_LOOP                                = 1 # Loop
 VSCP2_TYPE_VSCPD_PAUSE                               = 3 # Pause
 VSCP2_TYPE_VSCPD_ACTIVATE                            = 4 # Activate
-VSCP2_TYPE_VSCPD_SECOND                              = 5 # Second
-VSCP2_TYPE_VSCPD_MINUTE                              = 6 # Minute
-VSCP2_TYPE_VSCPD_HOUR                                = 7 # Hour
-VSCP2_TYPE_VSCPD_NOON                                = 8 # Noon
-VSCP2_TYPE_VSCPD_MIDNIGHT                            = 9 # Midnight
-VSCP2_TYPE_VSCPD_WEEK                                = 11 # Week
-VSCP2_TYPE_VSCPD_MONTH                               = 12 # Month
-VSCP2_TYPE_VSCPD_QUARTER                             = 13 # Quarter
-VSCP2_TYPE_VSCPD_YEAR                                = 14 # Year
-VSCP2_TYPE_VSCPD_RANDOM_MINUTE                       = 15 # Random-minute
-VSCP2_TYPE_VSCPD_RANDOM_HOUR                         = 16 # Random-hour
-VSCP2_TYPE_VSCPD_RANDOM_DAY                          = 17 # Random-day
-VSCP2_TYPE_VSCPD_RANDOM_WEEK                         = 18 # Random-week
-VSCP2_TYPE_VSCPD_RANDOM_MONTH                        = 19 # Random-month
-VSCP2_TYPE_VSCPD_RANDOM_YEAR                         = 20 # Random-year
-VSCP2_TYPE_VSCPD_DUSK                                = 21 # Dusk
-VSCP2_TYPE_VSCPD_DAWN                                = 22 # Dawn
-VSCP2_TYPE_VSCPD_STARTING_UP                         = 23 # Starting up
-VSCP2_TYPE_VSCPD_SHUTTING_DOWN                       = 24 # Shutting down
-VSCP2_TYPE_VSCPD_TIMER_STARTED                       = 25 # Timer started
-VSCP2_TYPE_VSCPD_TIMER_PAUSED                        = 26 # Timer paused
-VSCP2_TYPE_VSCPD_TIMER_RESUMED                       = 27 # Timer resumed
-VSCP2_TYPE_VSCPD_TIMER_STOPPED                       = 28 # Timer stopped
-VSCP2_TYPE_VSCPD_TIMER_ELLAPSED                      = 29 # Timer Elapsed
-VSCP2_TYPE_VSCPD_NEW_CALCULATION                     = 30 # New Calculations
-VSCP2_TYPE_VSCPD_DRV3_START                          = 31 # Start
-VSCP2_TYPE_VSCPD_DRV3_STOP                           = 32 # Stop
-VSCP2_TYPE_VSCPD_DRV3_PAUSE                          = 33 # Pause
-VSCP2_TYPE_VSCPD_DRV3_RESUME                         = 34 # Resume
-VSCP2_TYPE_VSCPD_DRV3_RESTART                        = 35 # Restart
-VSCP2_TYPE_VSCPD_DRV3_CONFIG                         = 36 # Config
+VSCP2_TYPE_VSCPD_STARTING_UP                         = 5 # Starting up
+VSCP2_TYPE_VSCPD_SHUTTING_DOWN                       = 6 # Shutting down
+VSCP2_TYPE_VSCPD_DRV3_START                          = 7 # Start
+VSCP2_TYPE_VSCPD_DRV3_STOP                           = 8 # Stop
+VSCP2_TYPE_VSCPD_DRV3_PAUSE                          = 9 # Pause
+VSCP2_TYPE_VSCPD_DRV3_RESUME                         = 10 # Resume
+VSCP2_TYPE_VSCPD_DRV3_RESTART                        = 11 # Restart
+VSCP2_TYPE_VSCPD_DRV3_CONFIG                         = 12 # Config
  
  
