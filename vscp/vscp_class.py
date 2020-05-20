@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2020-04-24 18:01:05.796375
+#                        Generated: 2020-05-17 17:16:24.055938
 #
  
 CLASS1_PROTOCOL                          = 0      # VSCP Protocol Functionality
@@ -71,15 +71,35 @@ CLASS2_LEVEL1_PROTOCOL                   = 512    # Class2 Level I Protocol
 CLASS2_LEVEL1_ALARM                      = 513    # Class2 Level I Alarm
 CLASS2_LEVEL1_SECURITY                   = 514    # Class2 Level I Security
 CLASS2_LEVEL1_MEASUREMENT                = 522    # Class2 Level I Measurements
+CLASS2_LEVEL1_MEASUREMENTX1              = 523    # Class2 Level I Measurements
+CLASS2_LEVEL1_MEASUREMENTX2              = 524    # Class2 Level I Measurements
+CLASS2_LEVEL1_MEASUREMENTX3              = 525    # Class2 Level I Measurements
+CLASS2_LEVEL1_MEASUREMENTX4              = 526    # Class2 Level I Measurements
 CLASS2_LEVEL1_DATA                       = 527    # Class2 Level I Data
 CLASS2_LEVEL1_INFORMATION1               = 532    # Class2 Level I Information
 CLASS2_LEVEL1_CONTROL                    = 542    # Class2 Level I Control
 CLASS2_LEVEL1_MULTIMEDIA                 = 552    # Class2 Level I Multimedia
 CLASS2_LEVEL1_AOL                        = 562    # Class2 Level I AOL
 CLASS2_LEVEL1_MEASUREMENT64              = 572    # Class2 Level I Measurement64
+CLASS2_LEVEL1_MEASUREMENT64X1            = 573    # Class2 Level I Measurement64
+CLASS2_LEVEL1_MEASUREMENT64X2            = 574    # Class2 Level I Measurement64
+CLASS2_LEVEL1_MEASUREMENT64X3            = 575    # Class2 Level I Measurement64
+CLASS2_LEVEL1_MEASUREMENT64X4            = 576    # Class2 Level I Measurement64
 CLASS2_LEVEL1_MEASUREZONE                = 577    # Class2 Level I Measurementzone
+CLASS2_LEVEL1_MEASUREZONEX1              = 578    # Class2 Level I Measurementzone
+CLASS2_LEVEL1_MEASUREZONEX2              = 579    # Class2 Level I Measurementzone
+CLASS2_LEVEL1_MEASUREZONEX3              = 580    # Class2 Level I Measurementzone
+CLASS2_LEVEL1_MEASUREZONEX4              = 581    # Class2 Level I Measurementzone
 CLASS2_LEVEL1_MEASUREMENT32              = 582    # Class2 Level I Measuremet32
+CLASS2_LEVEL1_MEASUREMENT32X1            = 583    # Class2 Level I Measuremet32
+CLASS2_LEVEL1_MEASUREMENT32X2            = 584    # Class2 Level I Measuremet32
+CLASS2_LEVEL1_MEASUREMENT32X3            = 585    # Class2 Level I Measuremet32
+CLASS2_LEVEL1_MEASUREMENT32X4            = 586    # Class2 Level I Measuremet32
 CLASS2_LEVEL1_SETVALUEZONE               = 597    # Class2 Level I SetValueZone
+CLASS2_LEVEL1_SETVALUEZONEX1             = 598    # Class2 Level I SetValueZone
+CLASS2_LEVEL1_SETVALUEZONEX2             = 599    # Class2 Level I SetValueZone
+CLASS2_LEVEL1_SETVALUEZONEX3             = 600    # Class2 Level I SetValueZone
+CLASS2_LEVEL1_SETVALUEZONEX4             = 601    # Class2 Level I SetValueZone
 CLASS2_LEVEL1_WEATHER                    = 602    # Class2 Level I Weather
 CLASS2_LEVEL1_WEATHERFORECAST            = 607    # Class2 Level I Weather Forecast
 CLASS2_LEVEL1_PHONE                      = 612    # Class2 Level I Phone

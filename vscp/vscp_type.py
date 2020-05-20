@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2020-04-24 18:01:06.872211
+#                        Generated: 2020-05-17 17:16:25.126542
 #
  
  
@@ -716,6 +716,18 @@ VSCP_TYPE_LOCAL_GENERAL                              = 0 # General event
 #  CLASS2.LEVEL1.MEASUREMENT = 522  -  Class2 Level I Measurements
 # 	Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
 
+#  CLASS2.LEVEL1.MEASUREMENTX1 = 523  -  Class2 Level I Measurements
+# 	Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENTX2 = 524  -  Class2 Level I Measurements
+# 	Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENTX3 = 525  -  Class2 Level I Measurements
+# 	Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENTX4 = 526  -  Class2 Level I Measurements
+# 	Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
+
 #  CLASS2.LEVEL1.DATA = 527  -  Class2 Level I Data
 # 	Event types is the same as  CLASS1.DATA = 15  -  Data
 
@@ -734,14 +746,62 @@ VSCP_TYPE_LOCAL_GENERAL                              = 0 # General event
 #  CLASS2.LEVEL1.MEASUREMENT64 = 572  -  Class2 Level I Measurement64
 # 	Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
 
+#  CLASS2.LEVEL1.MEASUREMENT64X1 = 573  -  Class2 Level I Measurement64
+# 	Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENT64X2 = 574  -  Class2 Level I Measurement64
+# 	Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENT64X3 = 575  -  Class2 Level I Measurement64
+# 	Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENT64X4 = 576  -  Class2 Level I Measurement64
+# 	Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
+
 #  CLASS2.LEVEL1.MEASUREZONE = 577  -  Class2 Level I Measurementzone
 # 	Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREZONEX1 = 578  -  Class2 Level I Measurementzone
+# 	Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREZONEX2 = 579  -  Class2 Level I Measurementzone
+# 	Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREZONEX3 = 580  -  Class2 Level I Measurementzone
+# 	Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREZONEX4 = 581  -  Class2 Level I Measurementzone
+# 	Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
 
 #  CLASS2.LEVEL1.MEASUREMENT32 = 582  -  Class2 Level I Measuremet32
 # 	Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
 
+#  CLASS2.LEVEL1.MEASUREMENT32X1 = 583  -  Class2 Level I Measuremet32
+# 	Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENT32X2 = 584  -  Class2 Level I Measuremet32
+# 	Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENT32X3 = 585  -  Class2 Level I Measuremet32
+# 	Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+
+#  CLASS2.LEVEL1.MEASUREMENT32X4 = 586  -  Class2 Level I Measuremet32
+# 	Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
+
 #  CLASS2.LEVEL1.SETVALUEZONE = 597  -  Class2 Level I SetValueZone
 # 	Event types is the same as  CLASS1.MEASUREMENT = 10  -  Measurement
+
+#  CLASS2.LEVEL1.SETVALUEZONEX1 = 598  -  Class2 Level I SetValueZone
+# 	Event types is the same as  CLASS1.MEASUREMENTX1 = 11  -  Measurement
+
+#  CLASS2.LEVEL1.SETVALUEZONEX2 = 599  -  Class2 Level I SetValueZone
+# 	Event types is the same as  CLASS1.MEASUREMENTX2 = 12  -  Measurement
+
+#  CLASS2.LEVEL1.SETVALUEZONEX3 = 600  -  Class2 Level I SetValueZone
+# 	Event types is the same as  CLASS1.MEASUREMENTX3 = 13  -  Measurement
+
+#  CLASS2.LEVEL1.SETVALUEZONEX4 = 601  -  Class2 Level I SetValueZone
+# 	Event types is the same as  CLASS1.MEASUREMENTX4 = 14  -  Measurement
 
 #  CLASS2.LEVEL1.WEATHER = 602  -  Class2 Level I Weather
 # 	Event types is the same as  CLASS1.WEATHER = 90  -  Weather
