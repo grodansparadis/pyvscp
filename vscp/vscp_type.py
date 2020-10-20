@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2020-05-17 17:16:25.126542
+#                        Generated: 2020-06-11 14:08:13.817488
 #
  
  
@@ -151,7 +151,7 @@ VSCP_TYPE_MEASUREMENT_MAGNETIC_FLUX_DENSITY          = 22 # Magnetic Flux Densit
 VSCP_TYPE_MEASUREMENT_INDUCTANCE                     = 23 # Inductance
 VSCP_TYPE_MEASUREMENT_FLUX_OF_LIGHT                  = 24 # Luminous Flux
 VSCP_TYPE_MEASUREMENT_ILLUMINANCE                    = 25 # Illuminance
-VSCP_TYPE_MEASUREMENT_RADIATION_DOSE                 = 26 # Radiation dose
+VSCP_TYPE_MEASUREMENT_RADIATION_DOSE_ABSORBED        = 26 # Radiation dose (absorbed)
 VSCP_TYPE_MEASUREMENT_CATALYTIC_ACITIVITY            = 27 # Catalytic activity
 VSCP_TYPE_MEASUREMENT_VOLUME                         = 28 # Volume
 VSCP_TYPE_MEASUREMENT_SOUND_INTENSITY                = 29 # Sound intensity
@@ -170,9 +170,9 @@ VSCP_TYPE_MEASUREMENT_SOUND_RESISTANCE               = 41 # Sound resistance
 VSCP_TYPE_MEASUREMENT_ELECTRIC_ELASTANCE             = 42 # Electric elastance
 VSCP_TYPE_MEASUREMENT_LUMINOUS_ENERGY                = 43 # Luminous energy
 VSCP_TYPE_MEASUREMENT_LUMINANCE                      = 44 # Luminance
-VSCP_TYPE_MEASUREMENT_CHEMICAL_CONCENTRATION         = 45 # Chemical concentration
-VSCP_TYPE_MEASUREMENT_RESERVED46                     = 46 # Reserved
-VSCP_TYPE_MEASUREMENT_DOSE_EQVIVALENT                = 47 # Dose equivalent
+VSCP_TYPE_MEASUREMENT_CHEMICAL_CONCENTRATION_MOLAR   = 45 # Chemical (molar) concentration
+VSCP_TYPE_MEASUREMENT_CHEMICAL_CONCENTRATION_MASS    = 46 # Chemical (mass) concentration
+VSCP_TYPE_MEASUREMENT_DOSE_EQVIVALENT                = 47 # Reserved
 VSCP_TYPE_MEASUREMENT_RESERVED48                     = 48 # Reserved
 VSCP_TYPE_MEASUREMENT_DEWPOINT                       = 49 # Dew Point
 VSCP_TYPE_MEASUREMENT_RELATIVE_LEVEL                 = 50 # Relative Level
@@ -186,6 +186,8 @@ VSCP_TYPE_MEASUREMENT_SPECTRAL_IRRADIANCE            = 57 # Spectral irradiance
 VSCP_TYPE_MEASUREMENT_SOUND_PRESSURE                 = 58 # Sound pressure (acoustic pressure)
 VSCP_TYPE_MEASUREMENT_SOUND_DENSITY                  = 59 # Sound energy density
 VSCP_TYPE_MEASUREMENT_SOUND_LEVEL                    = 60 # Sound level
+VSCP_TYPE_MEASUREMENT_RADIATION_DOSE_EQ              = 61 # Radiation dose (equivalent)
+VSCP_TYPE_MEASUREMENT_RADIATION_DOSE_EXPOSURE        = 62 # Radiation dose (exposure)
 
 #  CLASS1.MEASUREMENTX1 = 11  -  Measurement
 VSCP_TYPE_MEASUREMENTX1_GENERAL                      = 0 # General event

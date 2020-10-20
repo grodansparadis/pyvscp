@@ -19,7 +19,7 @@
 #            !!!!!!!!!!!!!!!!!!!!  W A R N I N G  !!!!!!!!!!!!!!!!!!!!
 #                           This file is auto-generated
 #                see https://github.com/grodansparadis/vscp-classes
-#                        Generated: 2020-05-17 17:16:24.055938
+#                        Generated: 2020-06-11 14:08:12.727338
 #
  
 CLASS1_PROTOCOL                          = 0      # VSCP Protocol Functionality

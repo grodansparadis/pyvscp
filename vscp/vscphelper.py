@@ -27,14 +27,15 @@
 # SOFTWARE.
 
 import os
-import ctypes 
+import ctypes
 import _ctypes
 from vscp import *
 
+
 if os.name == "nt":
-    lib = cdll.LoadLibrary('libvscphelper.dll')
+    lib = ctypes.cdll.LoadLibrary('libvscphelper.dll')
 else:
-    lib = cdll.LoadLibrary('libvscphelper.so')    
+    lib = ctypes.cdll.LoadLibrary('libvscphelper.so')    
 
 ###############################################################################
 # pyvscphlp_newSession
@@ -51,6 +52,7 @@ def pyvscphlp_newSession():
 
 def pyvscphlp_closeSession( handle ):
     lib.vscphlp_closeSession( c_ulong(handle) )
+    # Is this needed?
     if os.name == "nt":
         _ctypes.FreeLibrary(lib1._handle)
     else:    
@@ -78,9 +80,9 @@ def pyvscphlp_setAfterCommandSleep(handle, timeout):
 
 def pyvscphlp_open(handle,host,user,password):
     rv = lib.vscphlp_open( c_ulong(handle),
-                            c_char_p(host),
-                            c_char_p(user),
-                            c_char_p(password))
+                            c_char_p(host.encode('utf-8')),
+                            c_char_p(user.encode('utf-8')),
+                            c_char_p(password.encode('utf-8')))
     return rv        
 
 ###############################################################################
@@ -89,7 +91,7 @@ def pyvscphlp_open(handle,host,user,password):
 
 def pyvscphlp_openInterface(handle,interface,flags):
     rv = lib.vscphlp_openInterface( c_ulong(handle),
-                                        c_char_p(interface),
+                                        c_char_p(interface.encode('utf-8')),
                                         c_ulong(flags) )
     return rv 
 
@@ -114,7 +116,7 @@ def pyvscphlp_isConnected(handle):
 #
 
 def pyvscphlp_doCommand(handle, command):
-    rv = lib.vscphlp_doCommand( c_ulong(handle), c_char_p(command) )
+    rv = lib.vscphlp_doCommand( c_ulong(handle), c_char_p(command.encode('utf-8')) )
     return rv
 
 ###############################################################################

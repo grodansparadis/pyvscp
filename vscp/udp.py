@@ -138,22 +138,22 @@ def encryptVscpFrame( frame, encryption ):
     prebyte = b"\x01"
 
     if  VSCP_ENCRYPTION_NONE == encryption :
-        print "No encryption is used."
+        print("No encryption is used.")
         return frame
     elif VSCP_ENCRYPTION_AES128 == encryption :
-        print "AES128 encryption is used."
+        print("AES128 encryption is used.")
         key = binascii.unhexlify( VSCP_DEFAULT_KEY16 )
         prebyte = b"\x01"
     elif VSCP_ENCRYPTION_AES192 == encryption :
-        print "AES192 encryption is used."
+        print("AES192 encryption is used.")
         key = binascii.unhexlify( VSCP_DEFAULT_KEY24 )
         prebyte = b"\x02"
     elif VSCP_ENCRYPTION_AES256 == encryption :
-        print "AES256 encryption is used."
+        print("AES256 encryption is used.")
         key = binascii.unhexlify( VSCP_DEFAULT_KEY32 )
         prebyte = b"\x03"
     else :
-        print "Bad encryption argument - AES128 encryption used."
+        print("Bad encryption argument - AES128 encryption used.")
 
     # Frame must be 16 byte aligned for encryption
     while ( len( frame ) - 1 ) % 16:

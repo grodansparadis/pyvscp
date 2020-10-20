@@ -10,7 +10,7 @@ def makeClass2StrMeasurement( vscpclass, vscptype, strval ):
 e = vscpEvent()
 ex = vscpEventEx()
 
-print type(e), type(ex)
+print(type(e), type(ex))
 
 ex.head = 0
 
@@ -25,7 +25,7 @@ temperature = "27.235"
 #temperature = -22.872
 b = bytearray()
 b.extend(temperature)
-print int(temperature[0].encode("hex")), len(b)
+print(int(temperature[0].encode("hex")), len(b))
 ex = makeClass2StrMeasurement( 1, 2, temperature )
 
 

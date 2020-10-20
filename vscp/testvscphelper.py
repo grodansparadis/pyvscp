@@ -27,52 +27,53 @@
 # SOFTWARE.
 
 from vscphelper import *
+from vscp_class import *
 import time
 
-print "------------------------------------------------------------------------"
+print("------------------------------------------------------------------------")
 h1 = pyvscphlp_newSession()
 if (0 == h1 ):
     pyvscphlp_closeSession(h1)
     raise ValueError('Unable to open vscphelp library session')
 
-print "------------------------------------------------------------------------"
-print "\n\nConnection in progress..."
-rv = pyvscphlp_open(h1,"199.0.0.1:9598","admin","secret")
+print("------------------------------------------------------------------------")
+print("\n\nConnection in progress...")
+rv = pyvscphlp_open(h1,"192.168.1.7:9598","admin","secret")
 if VSCP_ERROR_SUCCESS == rv :
-    print "Command success: pyvscphlp_open on channel 1"
+    print("Command success: pyvscphlp_open on channel 1")
 else:
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_open on channel 1  Error code=%d' % rv )
 
 if ( VSCP_ERROR_SUCCESS == pyvscphlp_isConnected(h1) ):
-    print "CONNECTED!"
+    print("CONNECTED!")
 else:
-    print "DISCONNECTED!"    
+    print("DISCONNECTED!")
 
-print "------------------------------------------------------------------------"
-print "command: noop"
+print("------------------------------------------------------------------------")
+print("command: noop")
 rv = lib.vscphlp_noop( h1 )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: ''noop''  Error code=%d' % rv )
 
-print "------------------------------------------------------------------------"
-print "command: pyvscphlp_doCommand"
+print("------------------------------------------------------------------------")
+print("command: pyvscphlp_doCommand")
 command = "NOOP\r\n"
 rv = pyvscphlp_doCommand( h1, command )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: ''pyvscphlp_doCommand''  Error code=%d' % rv )    
 
-print "------------------------------------------------------------------------"
-print "command: Get sever version"
+print("------------------------------------------------------------------------")
+print("command: Get sever version")
 (rv,v1,v2,v3) = pyvscphlp_getVersion(h1)
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: ''pyvscphlp_getVersion''  Error code=%d' % rv )
-print "Server version = %d.%d.%d" % (v1.value,v2.value,v3.value) 
+print("Server version = %d.%d.%d" % (v1.value,v2.value,v3.value))
 
-print "------------------------------------------------------------------------"
+print("------------------------------------------------------------------------")
 ex = vscpEventEx()
 ex.timestamp = 0
 ex.vscpclass = 10
@@ -81,7 +82,7 @@ ex.sizedata = 3
 ex.data[0] = 1
 ex.data[1] = 2
 ex.data[2] = 3
-print "command: sendEventEx"
+print("command: sendEventEx")
 rv = pyvscphlp_sendEventEx(h1,ex)
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
@@ -98,42 +99,42 @@ p[1] = 22
 p[2] = 33
 e.pdata = cast(p, POINTER(c_ubyte))
 
-print "------------------------------------------------------------------------"
-print "command: sendEvent"
+print("------------------------------------------------------------------------")
+print("command: sendEvent")
 rv = pyvscphlp_sendEvent(h1,e)
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: sendEvent  Error code=%d' % rv )
 e.pdata = None    
 
-print "------------------------------------------------------------------------"
-print "Waiting for incoming data..."
+print("------------------------------------------------------------------------")
+print("Waiting for incoming data...")
 
 cntAvailable = ctypes.c_uint(0)
 while cntAvailable.value==0:
-    print 'Still waiting...'
+    print('Still waiting...')
     time.sleep(1)
     pyvscphlp_isDataAvailable(h1,cntAvailable)
 
-print '%d event(s) is available' % cntAvailable.value
+print('%d event(s) is available' % cntAvailable.value)
 
 for i in range(0,cntAvailable.value):
     ex = vscpEventEx()
     if VSCP_ERROR_SUCCESS == pyvscphlp_receiveEventEx(h1,ex):
         ex.dump()
 
-print "------------------------------------------------------------------------"
-print "Empty VSCP server queue"
+print("------------------------------------------------------------------------")
+print("Empty VSCP server queue")
 rv = pyvscphlp_clearDaemonEventQueue(h1)
 if VSCP_ERROR_SUCCESS == rv:
-    print "Server queue now is empty"
+    print("Server queue now is empty")
 else:
-    print "Failed to clear server queue", rv    
+    print("Failed to clear server queue", rv )
 
-print "------------------------------------------------------------------------"
-print "Enter receive loop. Will lock channel on just receiving events"
+print("------------------------------------------------------------------------")
+print("Enter receive loop. Will lock channel on just receiving events")
 if VSCP_ERROR_SUCCESS == pyvscphlp_enterReceiveLoop(h1):
-    print "Now blocking receive - will take forever if no events is received"
+    print("Now blocking receive - will take forever if no events is received")
     
     rv = -1
     while VSCP_ERROR_SUCCESS != rv:
@@ -144,29 +145,29 @@ if VSCP_ERROR_SUCCESS == pyvscphlp_enterReceiveLoop(h1):
             ex.dump()
         else:
             if VSCP_ERROR_TIMEOUT != rv:
-                print "Blocking receive failed with error code = %d" % rv 
+                print("Blocking receive failed with error code = %d" % rv )
                 break;
-            print "Waiting for event in blocking mode rv=%d" % rv
+            print("Waiting for event in blocking mode rv=%d" % rv)
 
     if VSCP_ERROR_SUCCESS == pyvscphlp_quitReceiveLoop(h1):
-        print "Successfully left receive loop"
+        print("Successfully left receive loop")
     else:
-        print "failed to leave receive loop"    
+        print("failed to leave receive loop")
 
 else:    
-    print "Failed to enter receive loop!"
+    print("Failed to enter receive loop!")
 
 # Set filter
-print "------------------------------------------------------------------------"
+print("------------------------------------------------------------------------")
 filter = vscpEventFilter()
 filter.mask_class = 0xFFFF                      # All bits should be checked
-filter.filter_class = VSCP_CLASS1_MEASUREMENT   # Only CLASS1.MEASUREMENT received
+filter.filter_class = CLASS1_MEASUREMENT   # Only CLASS1.MEASUREMENT received
 rv = pyvscphlp_setFilter( h1, filter )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_setFilter  Error code=%d' % rv )
 
-print "Enter receive loop. Will lock channel for 60 seconds or unit CLASS1.MEASUREMENT event received"
+print("Enter receive loop. Will lock channel for 60 seconds or unit CLASS1.MEASUREMENT event received")
 if VSCP_ERROR_SUCCESS == pyvscphlp_enterReceiveLoop(h1):
        
     cnt = 0   
@@ -178,25 +179,25 @@ if VSCP_ERROR_SUCCESS == pyvscphlp_enterReceiveLoop(h1):
         if VSCP_ERROR_SUCCESS == rv: 
             ex.dump()
         else: 
-            print "Waiting for CLASS1.MEASUREMENT event in blocking mode rv=%d" % rv
+            print("Waiting for CLASS1.MEASUREMENT event in blocking mode rv=%d" % rv)
 
         cnt += 1
         if ( cnt > 60 ):
-            print "Not received within 60 seconds. We quit!"
+            print("Not received within 60 seconds. We quit!")
             break
 
     if VSCP_ERROR_SUCCESS == pyvscphlp_quitReceiveLoop(h1):
-        print "Successfully left receive loop"
+        print("Successfully left receive loop")
     else:
-        print "failed to leave receive loop"    
+        print("failed to leave receive loop")
 
 else:    
-    print "Failed to enter receive loop!"
+    print("Failed to enter receive loop!")
 
 
 # Clear filter
-print "------------------------------------------------------------------------"
-print "Clear filter"
+print("------------------------------------------------------------------------")
+print("Clear filter")
 filter = vscpEventFilter()
 filter.clear()
 rv = pyvscphlp_setFilter( h1, filter )
@@ -205,67 +206,67 @@ if VSCP_ERROR_SUCCESS != rv :
     raise ValueError('Command error: pyvscphlp_setFilter  Error code=%d' % rv )  
 
 # Get statistics
-print "------------------------------------------------------------------------"
-print "Get statistics"
+print("------------------------------------------------------------------------")
+print("Get statistics")
 statistics = VSCPStatistics()
 rv = pyvscphlp_getStatistics( h1, statistics )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_setStatistics  Error code=%d' % rv )      
-print "Received frames = %d" % statistics.cntReceiveFrames
-print "Transmitted frames = %d" % statistics.cntTransmitFrames
-print "Receive data = %d" % statistics.cntReceiveData
-print "Transmitted data = %d" % statistics.cntTransmitData
-print "Overruns = %d" % statistics.cntOverruns
+print("Received frames = %d" % statistics.cntReceiveFrames)
+print("Transmitted frames = %d" % statistics.cntTransmitFrames)
+print("Receive data = %d" % statistics.cntReceiveData)
+print("Transmitted data = %d" % statistics.cntTransmitData)
+print("Overruns = %d" % statistics.cntOverruns)
      
 # Get status
-print "------------------------------------------------------------------------"
-print "Get status"
+print("------------------------------------------------------------------------")
+print("Get status")
 status = VSCPStatus()
 rv = pyvscphlp_getStatus( h1, status )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_getStatus  Error code=%d' % rv )
-print "Channel status = %d" % status.channel_status 
-print "Channel status = %d" % status.lasterrorcode 
-print "Channel status = %d" % status.lasterrorsubcode   
+print("Channel status = %d" % status.channel_status) 
+print("Channel status = %d" % status.lasterrorcode) 
+print("Channel status = %d" % status.lasterrorsubcode)
 
 # Get DLL version
-print "------------------------------------------------------------------------"
-print "Get DLL version"
+print("------------------------------------------------------------------------")
+print("Get DLL version")
 (rv,dllversion) = pyvscphlp_getDLLVersion( h1 )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_getStatus  Error code=%d' % rv )
-print "DLL version = %d" % dllversion.value
+print("DLL version = %d" % dllversion.value)
 
 # Get vendor string
-print "------------------------------------------------------------------------"
-print "Get vendor string"
+print("------------------------------------------------------------------------")
+print("Get vendor string")
 (rv,strvendor) = pyvscphlp_getVendorString( h1 )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_getVendorString  Error code=%d' % rv )
-print "Vendor string = %s" % strvendor
+print("Vendor string = %s" % strvendor)
 
 # Get driver info string
-print "------------------------------------------------------------------------"
-print "Get driver info string"
+print("------------------------------------------------------------------------")
+print("Get driver info string")
 (rv,strdriverinfo) = pyvscphlp_getDriverInfo( h1 )
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: pyvscphlp_getDriverInfo  Error code=%d' % rv )
-print "Driver info string = %s" % strdriverinfo
+print("Driver info string = %s" % strdriverinfo)
 
-print "------------------------------------------------------------------------"
-print "command: close"
+print("------------------------------------------------------------------------")
+print("command: close")
 rv = pyvscphlp_close(h1)
 if VSCP_ERROR_SUCCESS != rv :
     pyvscphlp_closeSession(h1)
     raise ValueError('Command error: close  Error code=%d' % rv )
 
-print "------------------------------------------------------------------------"
-print "command: closeSession"
+print("------------------------------------------------------------------------")
+print("command: closeSession")
 pyvscphlp_closeSession(h1)
 
 

@@ -32,14 +32,15 @@ import socket
 import sys
 import datetime
 from ctypes import *
-from vscp_class import *
-from vscp_type import *
+#from vscp import vscp_class
+#from vscp import vscp_type
 
 VSCP_DEFAULT_UDP_PORT =                 33333
 VSCP_DEFAULT_TCP_PORT =                 9598
 VSCP_ANNNOUNCE_MULTICAST_PORT =         9598
 VSCP_MULTICAST_IPV4_ADDRESS_STR =       "224.0.23.158"
 VSCP_DEFAULT_MULTICAST_PORT =           44444
+
 VSCP_DEFAULT_MULTICAST_TTL =            1
 
 VSCP_ADDRESS_SEGMENT_CONTROLLER	=       0x00
@@ -131,19 +132,19 @@ class vscpEventEx(Structure):
             self.data[i] = 0
 
     def dump(self):
-        print "------------------------------------------------------------------------"
-        print "Dump of vscpEventEx content"
-        print " %04d-%02d-%02d %02d:%02d:%02d UTC Timestamp=%08X" % (self.year,self.month, self.day, self.hour, self.minute, self.second, self.timestamp)
-        print " head=%04X class=%d type=%d size=%d" % (self.head, self.vscpclass, self.vscptype, self.sizedata )        
+        print("------------------------------------------------------------------------")
+        print("Dump of vscpEventEx content")
+        print(" %04d-%02d-%02d %02d:%02d:%02d UTC Timestamp=%08X" % (self.year,self.month, self.day, self.hour, self.minute, self.second, self.timestamp))
+        print(" head=%04X class=%d type=%d size=%d" % (self.head, self.vscpclass, self.vscptype, self.sizedata ) )
         if self.sizedata > 0:
             out = "Data = "
             for i in range(0,self.sizedata):
                 out += "%02X " % self.data[i] 
-            print out    
+            print(out)    
         else:
-            print "No data."  
-        print "crc=%04X obid=%08X" % (self.crc, self.obid)
-        print "------------------------------------------------------------------------" 
+            print("No data.")
+        print("crc=%04X obid=%08X" % (self.crc, self.obid))
+        print("------------------------------------------------------------------------") 
 
 # VSCP event structure  (!!!!! Use vscpEventEx !!!!!)
 class vscpEvent(Structure):
