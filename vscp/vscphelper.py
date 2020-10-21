@@ -27,22 +27,22 @@
 # SOFTWARE.
 
 import os
-import ctypes
+from ctypes import *
 import _ctypes
-#from vscp import *
+from vscp import *
 
 
 if os.name == "nt":
-    lib = ctypes.cdll.LoadLibrary('libvscphelper.dll')
+    lib = cdll.LoadLibrary('libvscphelper.dll')
 else:
-    lib = ctypes.cdll.LoadLibrary('libvscphelper.so')    
+    lib = cdll.LoadLibrary('libvscphelper.so')    
 
 ###############################################################################
 # newSession
 #
 
 def newSession():
-    lib.vscphlp_newSession.restype = ctypes.c_ulong
+    lib.vscphlp_newSession.restype = c_ulong
     handle = lib.vscphlp_newSession()
     return handle
 
