@@ -29,7 +29,7 @@
 import os
 import ctypes
 import _ctypes
-from vscp import *
+#from vscp import *
 
 
 if os.name == "nt":
@@ -38,19 +38,19 @@ else:
     lib = ctypes.cdll.LoadLibrary('libvscphelper.so')    
 
 ###############################################################################
-# pyvscphlp_newSession
+# newSession
 #
 
-def pyvscphlp_newSession():
+def newSession():
     lib.vscphlp_newSession.restype = ctypes.c_ulong
     handle = lib.vscphlp_newSession()
     return handle
 
 ###############################################################################
-# pyvscphlp_closeSession
+# closeSession
 #
 
-def pyvscphlp_closeSession( handle ):
+def closeSession( handle ):
     lib.vscphlp_closeSession( c_ulong(handle) )
     # Is this needed?
     if os.name == "nt":
@@ -59,26 +59,26 @@ def pyvscphlp_closeSession( handle ):
         _ctypes.dlclose(lib._handle)      
 
 ###############################################################################
-# pyvscphlp_setResponseTimeout
+# setResponseTimeout
 #
 
-def pyvscphlp_setResponseTimeout(handle, timeout):
+def setResponseTimeout(handle, timeout):
     rv = lib.vscphlp_setResponseTimeout( c_ulong(handle), c_ulong(timeout) )
     return rv
 
 ###############################################################################
-# pyvscphlp_setAfterCommandSleep
+# setAfterCommandSleep
 #
 
-def pyvscphlp_setAfterCommandSleep(handle, timeout):
+def setAfterCommandSleep(handle, timeout):
     rv = lib.vscphlp_setAfterCommandSleep( c_ulong(handle), c_ushort(timeout) )
     return rv
 
 ###############################################################################
-# pyvscphlp_open
+# open
 #
 
-def pyvscphlp_open(handle,host,user,password):
+def open(handle,host,user,password):
     rv = lib.vscphlp_open( c_ulong(handle),
                             c_char_p(host.encode('utf-8')),
                             c_char_p(user.encode('utf-8')),
@@ -86,180 +86,180 @@ def pyvscphlp_open(handle,host,user,password):
     return rv        
 
 ###############################################################################
-# pyvscphlp_openInterface
+# openInterface
 #
 
-def pyvscphlp_openInterface(handle,interface,flags):
+def openInterface(handle,interface,flags):
     rv = lib.vscphlp_openInterface( c_ulong(handle),
                                         c_char_p(interface.encode('utf-8')),
                                         c_ulong(flags) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_close
+# close
 #
 
-def pyvscphlp_close(handle):
+def close(handle):
     rv = lib.vscphlp_close( c_ulong(handle) )
     return rv    
 
 ###############################################################################
-# pyvscphlp_isConnected
+# isConnected
 #
 
-def pyvscphlp_isConnected(handle):
+def isConnected(handle):
     rv = lib.vscphlp_isConnected( c_ulong(handle) )
     return rv
 
 ###############################################################################
-# pyvscphlp_doCommand
+# doCommand
 #
 
-def pyvscphlp_doCommand(handle, command):
+def doCommand(handle, command):
     rv = lib.vscphlp_doCommand( c_ulong(handle), c_char_p(command.encode('utf-8')) )
     return rv
 
 ###############################################################################
-# pyvscphlp_checkReply
+# checkReply
 #
 
-def pyvscphlp_checkReply(handle, bClear):
+def checkReply(handle, bClear):
     rv = lib.vscphlp_checkReply( c_ulong(handle), c_int(bClear) )
     return rv
 
 ###############################################################################
-# pyvscphlp_clearLocalInputQueue
+# clearLocalInputQueue
 #
 
-def pyvscphlp_clearLocalInputQueue(handle):
+def clearLocalInputQueue(handle):
     rv = lib.vscphlp_clearLocalInputQueue( c_ulong(handle) )
     return rv
 
 ###############################################################################
-# pyvscphlp_noop
+# noop
 #
 
-def pyvscphlp_noop(handle):    
+def noop(handle):    
     rv = lib.vscphlp_noop( c_ulong(handle) )
     return rv  
 
 ###############################################################################
-# pyvscphlp_clearDaemonEventQueue
+# clearDaemonEventQueue
 #
 
-def pyvscphlp_clearDaemonEventQueue(handle):    
+def clearDaemonEventQueue(handle):    
     rv = lib.vscphlp_clearDaemonEventQueue( c_ulong(handle) )
     return rv  
 
 ###############################################################################
-# pyvscphlp_sendEvent
+# sendEvent
 #
 
-def pyvscphlp_sendEvent(handle,event):    
+def sendEvent(handle,event):    
     rv = lib.vscphlp_sendEvent( c_ulong(handle), byref(event) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_sendEventEx
+# sendEventEx
 #
 
-def pyvscphlp_sendEventEx(handle,eventex):    
+def sendEventEx(handle,eventex):    
     rv = lib.vscphlp_sendEventEx( c_ulong(handle), byref(eventex) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_sendEvent
+# sendEvent
 #
 
-def pyvscphlp_sendEvent(handle,event):    
+def sendEvent(handle,event):    
     rv = lib.vscphlp_sendEvent( c_ulong(handle), byref(event) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_receiveEvent
+# receiveEvent
 #
 
-def pyvscphlp_receiveEvent(handle,event):    
+def receiveEvent(handle,event):    
     rv = lib.vscphlp_receiveEvent( c_ulong(handle), byref(event) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_receiveEventEx
+# receiveEventEx
 #
 
-def pyvscphlp_receiveEventEx(handle,eventex):    
+def receiveEventEx(handle,eventex):    
     rv = lib.vscphlp_receiveEventEx( c_ulong(handle), byref(eventex) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_isDataAvailable
+# isDataAvailable
 #
 
-def pyvscphlp_isDataAvailable(handle,cntAvailable):    
+def isDataAvailable(handle,cntAvailable):    
     rv = lib.vscphlp_isDataAvailable( c_ulong(handle), byref(cntAvailable))
     return rv
 
 ###############################################################################
-# pyvscphlp_enterReceiveLoop
+# enterReceiveLoop
 #
 
-def pyvscphlp_enterReceiveLoop(handle):    
+def enterReceiveLoop(handle):    
     rv = lib.vscphlp_enterReceiveLoop( c_ulong(handle) )
     return rv
 
 ###############################################################################
-# pyvscphlp_quitReceiveLoop
+# quitReceiveLoop
 #
 
-def pyvscphlp_quitReceiveLoop(handle):    
+def quitReceiveLoop(handle):    
     rv = lib.vscphlp_quitReceiveLoop( c_ulong(handle) )
     return rv
 
 ###############################################################################
-# pyvscphlp_blockingReceiveEvent
+# blockingReceiveEvent
 #
 
-def pyvscphlp_blockingReceiveEvent( handle, event, timeout):    
+def blockingReceiveEvent( handle, event, timeout):    
     rv = lib.vscphlp_blockingReceiveEvent( c_ulong(handle), byref(event), c_ulong(timeout) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_blockingReceiveEventEx
+# blockingReceiveEventEx
 #
 
-def pyvscphlp_blockingReceiveEventEx( handle, eventex, timeout ):    
+def blockingReceiveEventEx( handle, eventex, timeout ):    
     rv = lib.vscphlp_blockingReceiveEventEx( c_ulong(handle), byref(eventex), c_ulong(timeout) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_setStatistics
+# setStatistics
 #
 
-def pyvscphlp_getStatistics( handle, statistics ):    
+def getStatistics( handle, statistics ):    
     rv = lib.vscphlp_getStatistics( c_ulong(handle), byref(statistics) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_setStatus
+# setStatus
 #
 
-def pyvscphlp_getStatus( handle, status ):    
+def getStatus( handle, status ):    
     rv = lib.vscphlp_getStatus( c_ulong(handle), byref(status) )
     return rv
 
 ###############################################################################
-# pyvscphlp_setFilter
+# setFilter
 #
 
-def pyvscphlp_setFilter( handle, filter ):    
+def setFilter( handle, filter ):    
     rv = lib.vscphlp_setFilter( c_ulong(handle), byref(filter) )
     return rv 
 
 ###############################################################################
-# pyvscphlp_getVersion
+# getVersion
 #
 
-def pyvscphlp_getVersion(handle):
+def getVersion(handle):
     v1 = c_ubyte()
     v2 = c_ubyte()
     v3 = c_ubyte()
@@ -267,36 +267,36 @@ def pyvscphlp_getVersion(handle):
     return (rv,v1,v2,v3)
 
 ###############################################################################
-# pyvscphlp_getDLLVersion
+# getDLLVersion
 #
 
-def pyvscphlp_getDLLVersion(handle):
+def getDLLVersion(handle):
     dllversion = c_ulong()
     rv = lib.vscphlp_getDLLVersion( c_ulong(handle), byref( dllversion ) )
     return (rv,dllversion )
 
 ###############################################################################
-# pyvscphlp_getVendorString
+# getVendorString
 #
 
-def pyvscphlp_getVendorString(handle):
+def getVendorString(handle):
     strvendor = create_string_buffer(b'\000' * 80)
     rv = lib.vscphlp_getVendorString( c_ulong(handle), strvendor, c_size_t( 80 ) )
     return (rv,repr(strvendor.value) )
 
 ###############################################################################
-# pyvscphlp_getDriverInfo
+# getDriverInfo
 #
 
-def pyvscphlp_getDriverInfo(handle):
+def getDriverInfo(handle):
     strdrvinfo = create_string_buffer(b'\000' * 32000)
     rv = lib.vscphlp_getDriverInfo( c_ulong(handle), strdrvinfo, c_size_t( 32000 ) )
     return (rv,repr(strdrvinfo.value) )
 
 ###############################################################################
-# pyvscphlp_vscphlp_serverShutDown
+# vscphlp_serverShutDown
 #
 
-def pyvscphlp_vscphlp_serverShutDown(handle):
+def vscphlp_serverShutDown(handle):
     rv = lib.vscphlp_vscphlp_serverShutDown( c_ulong(handle)  )
     return rv 
