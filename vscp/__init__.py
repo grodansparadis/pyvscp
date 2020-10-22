@@ -25,13 +25,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__all__ = ["vscp", "vscp_class", "vscp_type", "vscphelper"]
+__all__ = ["vscp"]
 from . import vscp
-from . import vscphelper
-from . import vscp_class
-from . import vscp_type
-#from . import udp
-#from . import multicast
+
 __author__ = 'Ake Hedman'
 __email__ = 'akhe@grodansparadis.com'
-__version__ = '0.1.20'
+
