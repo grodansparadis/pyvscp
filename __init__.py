@@ -30,4 +30,5 @@ from . import vscp
 
 __author__ = 'Ake Hedman'
 __email__ = 'akhe@grodansparadis.com'
+__version__ = '0.3.0'
 
