@@ -3,7 +3,7 @@
 # setup.py that excludes installing the "tests" package
 
 import sys
-sys.path.append('.')    # Should be executed from project root folder
+sys.path.append('..')    # Should be executed from project root folder
 import vscp
 
 def test_success():
