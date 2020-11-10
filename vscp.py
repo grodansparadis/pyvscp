@@ -70,6 +70,16 @@ VSCP_HEADER_NO_CRC =                    0x08    # Don't calculate CRC
 
 VSCP_NO_CRC_CALC =                      0x08    # If set no CRC is calculated
 
+VSCP_HEADER16_DUMB                      0x8000  # This node is dumb 
+VSCP_HEADER16_IPV6_GUID                 0x1000  # GUID is IPv6 address 
+
+# Bits 14/13/12 for GUID type 
+VSCP_HEADER16_GUID_TYPE_STANDARD =      0x0000  # VSCP standard GUID 
+VSCP_HEADER16_GUID_TYPE_IPV6 =          0x1000  # GUID is IPv6 address 
+# https://www.sohamkamani.com/blog/2016/10/05/uuid1-vs-uuid4/ */
+VSCP_HEADER16_GUID_TYPE_RFC4122V1 =     0x2000      # GUID is RFC 4122 Version 1 
+define VSCP_HEADER16_GUID_TYPE_RFC4122V4 = 0x3000   # GUID is RFC 4122 Version 4 
+
 VSCP_MASK_PRIORITY =                    0xE0
 VSCP_MASK_HARDCODED =                   0x10
 VSCP_MASK_NOCRCCALC =                   0x08
@@ -499,65 +509,73 @@ VSCP_ERROR_OPERATION_FAILED                 =   42      # Operation failed for s
 VSCP_ERROR_BUFFER_TO_SMALL                  =   43      # Supplied buffer is to small to fit content
 VSCP_ERROR_UNKNOWN_ITEM                     =   44      # Requested item (remote variable) is unknown
 VSCP_ERROR_ALREADY_DEFINED                  =   45      # The name is already in use.
+VSCP_ERROR_WRITE_ERROR                      =   46      # Error when writing data 
+VSCP_ERROR_STOPPED                          =   47      # Operation stopped or aborted 
+VSCP_ERROR_INVALID_POINTER                  =   48      # Pointer with invalid value 
+VSCP_ERROR_INVALID_PERMISSION               =   49      # Not allowed to do that 
+VSCP_ERROR_INVALID_PATH                     =   50      # Invalid path (permissions) 
+VSCP_ERROR_ERRNO                            =   51      # General error, errno variable holds error 
+VSCP_ERROR_INTERUPTED                       =   52      # Interupted by signal or other cause 
+VSCP_ERROR_MISSING                          =   53      # Value, paramter or something else is missing 
+VSCP_ERROR_NOT_CONNECTED                    =   54      # There is no connection 
 
 #
 #    Template for VSCP XML event data
 # 
 #    data: datetime,head,obid,datetime,timestamp,class,type,guid,sizedata,data,note
 #  
-#<event>    
-#    <head>3</head>
-#    <obid>1234</obid>
-#    <datetime>2017-01-13T10:16:02</datetime>
-#    <timestamp>50817</timestamp>
-#    <class>10</class>
-#    <type>6</type>
-#    <guid>00:00:00:00:00:00:00:00:00:00:00:00:00:01:00:02</guid>
-#    <sizedata>7</sizedata>
-#    <data>0x48,0x34,0x35,0x2E,0x34,0x36,0x34</data>
-#    <note></note>
-#</event>
+#
+# EXAMPLE
+# <event
+#     vscpHead="3"
+#     vscpObId="1234"
+#     vscpDateTime="2017-01-13T10:16:02"
+#     vscpTimeStamp="50817"
+#     vscpClass="10"
+#     vscpType="6"
+#     vscpGuid="00:00:00:00:00:00:00:00:00:00:00:00:00:01:00:02"
+#     vscpData="0x48,0x34,0x35,0x2E,0x34,0x36,0x34" />
 # 
-VSCP_XML_EVENT_TEMPLATE = "<event>\n"\
-    "<head>%d</head>\n"\
-    "<obid>%lu</obid>\n"\
-    "<datetime>%s</datetime>\n"\
-    "<timestamp>%lu</timestamp>\n"\
-    "<class>%d</class>\n"\
-    "<type>%d</type>\n"\
-    "<guid>%s</guid>\n"\
-    "<sizedata>%d</sizedata>\n"\
-    "<data>%s</data>\n"\
-    "<note>%s</note>\n"\
-"</event>"
+VSCP_XML_EVENT_TEMPLATE = "<event\n"\
+    "vscpHead=\"%d\"\n"\
+    "vscpObId=\"%lu\"\n"\
+    "vscpDateTime=\"%s\"\n"\
+    "vscpTimeStamp=\"%lu\"\n"\
+    "vscpClass=\"%d\"\n"\
+    "vscpType=\"%d\"\n"\
+    "vscpGuid=\"%s\"\n"\
+    "vscpSizeData=\"%d\"\n"\
+    "vscpData=\"%s\"\n"\
+    "vscpNote=\"%s\"\n"\
+"/>"
 
 #
 #  
 #    Template for VSCP JSON event data
 #    data: datetime,head,obid,datetime,timestamp,class,type,guid,data,note 
 #  
-#    
-#    "head": 2,
-#    "obid"; 123,
-#    "datetime": "2017-01-13T10:16:02",
-#    "timestamp":50817,
-#    "class": 10,
-#    "type": 8,
-#    "guid": "00:00:00:00:00:00:00:00:00:00:00:00:00:01:00:02",
-#    "data": [1,2,3,4,5,6,7],
-#    "note": "This is some text"
+#    EXAMPLE
+#    "vscpHead": 2,
+#    "vscpObId"; 123,
+#    "vscpDateTime": "2017-01-13T10:16:02",
+#    "vscpTimeStamp":50817,
+#    "vscpClass": 10,
+#    "vscpType": 8,
+#    "vscpGuid": "00:00:00:00:00:00:00:00:00:00:00:00:00:01:00:02",
+#    "vscpData": [1,2,3,4,5,6,7],
+#    "vscpNote": "This is some text"
 #
 #
 VSCP_JSON_EVENT_TEMPLATE = "{\n"\
-    "\"head\": %d,\n"\
-    "\"obid\":  %lu,\n"\
-    "\"datetime\": \"%s\",\n"\
-    "\"timestamp\": %lu,\n"\
-    "\"class\": %d,\n"\
-    "\"type\": %d,\n"\
-    "\"guid\": \"%s\",\n"\
-    "\"data\": [%s],\n"\
-    "\"note\": \"%s\"\n"\
+    "\"vscpHead\": %d,\n"\
+    "\"vscpObId\":  %lu,\n"\
+    "\"vscpDateTime\": \"%s\",\n"\
+    "\"vscpTimeStamp\": %lu,\n"\
+    "\"vscpClass\": %d,\n"\
+    "\"vscpType\": %d,\n"\
+    "\"vscpGuid\": \"%s\",\n"\
+    "\"vscpData\": [%s],\n"\
+    "\"vscpNote\": \"%s\"\n"\
 "}"
 
 #
