@@ -41,57 +41,57 @@ VSCP_DEFAULT_MULTICAST_PORT =           44444
 
 VSCP_DEFAULT_MULTICAST_TTL =            1
 
-VSCP_ADDRESS_SEGMENT_CONTROLLER	=       0x00
-VSCP_ADDRESS_NEW_NODE =                 0xff
+VSCP_ADDRESS_SEGMENT_CONTROLLER	=       int('0x00',16)
+VSCP_ADDRESS_NEW_NODE =                 int('0xff',16)
 
 #VSCP levels
 VSCP_LEVEL1 =                           0
 VSCP_LEVEL2 =                           1
 
 # VSCP priority
-VSCP_PRIORITY_0 =                       0x00
-VSCP_PRIORITY_1 =                       0x20
-VSCP_PRIORITY_2 =                       0x40
-VSCP_PRIORITY_3 =                       0x60
-VSCP_PRIORITY_4 =                       0x80
-VSCP_PRIORITY_5 =                       0xA0
-VSCP_PRIORITY_6 =                       0xC0
-VSCP_PRIORITY_7 =                       0xE0
+VSCP_PRIORITY_0 =                       int('0x00',16)
+VSCP_PRIORITY_1 =                       int('0x20',16)
+VSCP_PRIORITY_2 =                       int('0x40',16)
+VSCP_PRIORITY_3 =                       int('0x60',16)
+VSCP_PRIORITY_4 =                       int('0x80',16)
+VSCP_PRIORITY_5 =                       int('0xA0',16)
+VSCP_PRIORITY_6 =                       int('0xC0',16)
+VSCP_PRIORITY_7 =                       int('0xE0',16)
 
-VSCP_PRIORITY_HIGH =                    0x00
-VSCP_PRIORITY_LOW =                     0xE0
-VSCP_PRIORITY_MEDIUM =                  0xC0
-VSCP_PRIORITY_NORMAL =                  0x60
+VSCP_PRIORITY_HIGH =                    int('0x00',16)
+VSCP_PRIORITY_LOW =                     int('0xE0',16)
+VSCP_PRIORITY_MEDIUM =                  int('0xC0',16)
+VSCP_PRIORITY_NORMAL =                  int('0x60',16)
 
-VSCP_HEADER_PRIORITY_MASK =             0xE0
+VSCP_HEADER_PRIORITY_MASK =             int('0xE0',16)
 
-VSCP_HEADER_HARD_CODED =                0x10    # If set node nickname is hardcoded
-VSCP_HEADER_NO_CRC =                    0x08    # Don't calculate CRC
+VSCP_HEADER_HARD_CODED =                int('0x10',16)    # If set node nickname is hardcoded
+VSCP_HEADER_NO_CRC =                    int('0x08',16)    # Don't calculate CRC
 
-VSCP_NO_CRC_CALC =                      0x08    # If set no CRC is calculated
+VSCP_NO_CRC_CALC =                      int('0x08',16)    # If set no CRC is calculated
 
-VSCP_HEADER16_DUMB                      0x8000  # This node is dumb 
-VSCP_HEADER16_IPV6_GUID                 0x1000  # GUID is IPv6 address 
+VSCP_HEADER16_DUMB                      int('0x8000',16)  # This node is dumb 
+VSCP_HEADER16_IPV6_GUID                 int('0x1000',16)  # GUID is IPv6 address 
 
 # Bits 14/13/12 for GUID type 
-VSCP_HEADER16_GUID_TYPE_STANDARD =      0x0000  # VSCP standard GUID 
-VSCP_HEADER16_GUID_TYPE_IPV6 =          0x1000  # GUID is IPv6 address 
+VSCP_HEADER16_GUID_TYPE_STANDARD =      int('0x0000',16)  # VSCP standard GUID 
+VSCP_HEADER16_GUID_TYPE_IPV6 =          int('0x1000',16)  # GUID is IPv6 address 
 # https://www.sohamkamani.com/blog/2016/10/05/uuid1-vs-uuid4/ */
-VSCP_HEADER16_GUID_TYPE_RFC4122V1 =     0x2000      # GUID is RFC 4122 Version 1 
-define VSCP_HEADER16_GUID_TYPE_RFC4122V4 = 0x3000   # GUID is RFC 4122 Version 4 
+VSCP_HEADER16_GUID_TYPE_RFC4122V1 =     int('0x2000',16)      # GUID is RFC 4122 Version 1 
+define VSCP_HEADER16_GUID_TYPE_RFC4122V4 = int('0x3000',16)   # GUID is RFC 4122 Version 4 
 
-VSCP_MASK_PRIORITY =                    0xE0
-VSCP_MASK_HARDCODED =                   0x10
-VSCP_MASK_NOCRCCALC =                   0x08
+VSCP_MASK_PRIORITY =                    int('0xE0',16)
+VSCP_MASK_HARDCODED =                   int('0x10',16)
+VSCP_MASK_NOCRCCALC =                   int('0x08',16)
 
 VSCP_LEVEL1_MAXDATA =                   8
 VSCP_LEVEL2_MAXDATA =                   512
 
-VSCP_NOCRC_CALC_DUMMY_CRC =             0xAA55  # If no CRC cal bit is set the CRC value
+VSCP_NOCRC_CALC_DUMMY_CRC =             int('0xAA55',16)  # If no CRC cal bit is set the CRC value
                                                 # should be set to this value for the CRC
                                                 # calculation to be skipped.
 
-VSCP_CAN_ID_HARD_CODED =	            0x02000000 # Hard coded bit in CAN frame id
+VSCP_CAN_ID_HARD_CODED =	            int('0x02000000',16) # Hard coded bit in CAN frame id
 
 # GUID byte positions
 VSCP_GUID_MSB =                         0
@@ -340,31 +340,31 @@ VSCP_DEFAULT_KEY24 = 'A4A86F7D7E119BA3F0CD06881E371B989B33B6D606A863B6'
 VSCP_DEFAULT_KEY32 = 'A4A86F7D7E119BA3F0CD06881E371B989B33B6D606A863B633EF529D64544F8E'
 
 # Bootloaders
-VSCP_BOOTLOADER_VSCP          =         0x00	# VSCP boot loader algorithm
-VSCP_BOOTLOADER_PIC1          =         0x01	# PIC algorithm 0
-VSCP_BOOTLOADER_AVR1          =         0x10	# AVR algorithm 0
-VSCP_BOOTLOADER_LPC1          =         0x20	# NXP/Philips LPC algorithm 0
-VSCP_BOOTLOADER_ST            =         0x30	# ST STR algorithm 0
-VSCP_BOOTLOADER_FREESCALE     =         0x40	# Freescale Kinetics algorithm 0
-VSCP_BOOTLOADER_NONE          =         0xff
+VSCP_BOOTLOADER_VSCP          =         int('0x00',16)	# VSCP boot loader algorithm
+VSCP_BOOTLOADER_PIC1          =         int('0x01',16)	# PIC algorithm 0
+VSCP_BOOTLOADER_AVR1          =         int('0x10',16)	# AVR algorithm 0
+VSCP_BOOTLOADER_LPC1          =         int('0x20',16)	# NXP/Philips LPC algorithm 0
+VSCP_BOOTLOADER_ST            =         int('0x30',16)	# ST STR algorithm 0
+VSCP_BOOTLOADER_FREESCALE     =         int('0x40',16)	# Freescale Kinetics algorithm 0
+VSCP_BOOTLOADER_NONE          =         int('0xff',16)
 
 #          * * * Data Coding for VSCP packets * * *
 
 # Data format masks
-VSCP_MASK_DATACODING_TYPE     =         0xE0  # Bits 5,6,7
-VSCP_MASK_DATACODING_UNIT     =         0x18  # Bits 3,4
-VSCP_MASK_DATACODING_INDEX    =         0x07  # Bits 0,1,2
+VSCP_MASK_DATACODING_TYPE     =         int('0xE0',16)  # Bits 5,6,7
+VSCP_MASK_DATACODING_UNIT     =         int('0x18',16)  # Bits 3,4
+VSCP_MASK_DATACODING_INDEX    =         int('0x07',16)  # Bits 0,1,2
 
 # These bits are coded in the three MSB bytes of the first data byte
 # in a packet and tells the type of the data that follows.
-VSCP_DATACODING_BIT           =         0x00
-VSCP_DATACODING_BYTE          =         0x20
-VSCP_DATACODING_STRING        =         0x40
-VSCP_DATACODING_INTEGER       =         0x60
-VSCP_DATACODING_NORMALIZED    =         0x80
-VSCP_DATACODING_SINGLE        =         0xA0  # single precision float
-VSCP_DATACODING_DOUBLE        =         0xC0  # double precision float
-VSCP_DATACODING_RESERVED2     =         0xE0
+VSCP_DATACODING_BIT           =         int('0x00',16)
+VSCP_DATACODING_BYTE          =         int('0x20',16)
+VSCP_DATACODING_STRING        =         int('0x40',16)
+VSCP_DATACODING_INTEGER       =         int('0x60',16)
+VSCP_DATACODING_NORMALIZED    =         int('0x80',16)
+VSCP_DATACODING_SINGLE        =         int('0xA0',16)  # single precision float
+VSCP_DATACODING_DOUBLE        =         int('0xC0',16)  # double precision float
+VSCP_DATACODING_RESERVED2     =         int('0xE0',16)
 
 # These bits are coded in the four least significant bits of the first data byte
 # in a packet and tells how the following data should be interpreted. For a flow sensor
@@ -373,16 +373,16 @@ VSCP_DATACODING_RESERVED2     =         0xE0
 VSCP_DATACODING_INTERPRETION_DEFAULT  =  0
 
 # CRC8 Constants
-VSCP_CRC8_POLYNOMIAL          =         0x18
-VSCP_CRC8_REMINDER            =         0x00
+VSCP_CRC8_POLYNOMIAL          =         int('0x18',16)
+VSCP_CRC8_REMINDER            =         int('0x00',16)
 
 # CRC16 Constants
-VSCP_CRC16_POLYNOMIAL         =         0x1021
-VSCP_CRC16_REMINDER           =         0xFFFF
+VSCP_CRC16_POLYNOMIAL         =         int('0x1021',16)
+VSCP_CRC16_REMINDER           =         int('0xFFFF',16)
 
 # CRC32 Constants
-VSCP_CRC32_POLYNOMIAL         =         0x04C11DB7
-VSCP_CRC32_REMINDER           =         0xFFFFFFFF
+VSCP_CRC32_POLYNOMIAL         =         int('0x04C11DB7',16)
+VSCP_CRC32_REMINDER           =         int('0xFFFFFFFF',16)
 
 
 # Node data - the required registers are fetched from this 
@@ -393,43 +393,43 @@ class vscpMyNode(Structure):
 
 # * * * Standard VSCP registers * * *
 
-# Register defines above 0x7f
-VSCP_STD_REGISTER_ALARM_STATUS              =   0x80
+# Register defines above 7f
+VSCP_STD_REGISTER_ALARM_STATUS              =   int('0x80',16)
 
-VSCP_STD_REGISTER_MAJOR_VERSION             =   0x81
-VSCP_STD_REGISTER_MINOR_VERSION             =   0x82
-VSCP_STD_REGISTER_SUB_VERSION               =   0x83
+VSCP_STD_REGISTER_MAJOR_VERSION             =   int('0x81',16)
+VSCP_STD_REGISTER_MINOR_VERSION             =   int('0x82',16)
+VSCP_STD_REGISTER_SUB_VERSION               =   int('0x83',16)
 
 # 0x84 - 0x88
-VSCP_STD_REGISTER_USER_ID                   =   0x84
+VSCP_STD_REGISTER_USER_ID                   =   int('0x84',16)
 
 # 0x89 - 0x8C
-VSCP_STD_REGISTER_USER_MANDEV_ID            =   0x89
+VSCP_STD_REGISTER_USER_MANDEV_ID            =   int('0x89',16)
 
 # 0x8D -0x90
-VSCP_STD_REGISTER_USER_MANSUBDEV_ID         =   0x8D
+VSCP_STD_REGISTER_USER_MANSUBDEV_ID         =   int('0x8D',16)
 
 # Nickname
-VSCP_STD_REGISTER_NICKNAME_ID               =   0x91
+VSCP_STD_REGISTER_NICKNAME_ID               =   int('0x91',16)
 
 # Selected register page
-VSCP_STD_REGISTER_PAGE_SELECT_MSB           =   0x92
-VSCP_STD_REGISTER_PAGE_SELECT_LSB           =   0x93
+VSCP_STD_REGISTER_PAGE_SELECT_MSB           =   int('0x92',16)
+VSCP_STD_REGISTER_PAGE_SELECT_LSB           =   int('0x93',16)
 
 # Firmware version
-VSCP_STD_REGISTER_FIRMWARE_MAJOR            =   0x94
-VSCP_STD_REGISTER_FIRMWARE_MINOR            =   0x95
-VSCP_STD_REGISTER_FIRMWARE_SUBMINOR         =   0x96
+VSCP_STD_REGISTER_FIRMWARE_MAJOR            =   int('0x94',16)
+VSCP_STD_REGISTER_FIRMWARE_MINOR            =   int('0x95',16)
+VSCP_STD_REGISTER_FIRMWARE_SUBMINOR         =   int('0x96v
 
-VSCP_STD_REGISTER_BOOT_LOADER               =   0x97
-VSCP_STD_REGISTER_BUFFER_SIZE               =   0x98
-VSCP_STD_REGISTER_PAGES_COUNT               =   0x99
+VSCP_STD_REGISTER_BOOT_LOADER               =   int('0x97',16)
+VSCP_STD_REGISTER_BUFFER_SIZE               =   int('0x98',16)
+VSCP_STD_REGISTER_PAGES_COUNT               =   int('0x99',16)
 
 # 0xd0 - 0xdf  GUID
-VSCP_STD_REGISTER_GUID                      =   0xD0
+VSCP_STD_REGISTER_GUID                      =   int('0xD0',16)
  
 # 0xe0 - 0xff  MDF
-VSCP_STD_REGISTER_DEVICE_URL                =   0xE0
+VSCP_STD_REGISTER_DEVICE_URL                =   int('0xE0',16)
 
 # Level I Decision Matrix
 VSCP_LEVEL1_DM_ROW_SIZE                     =   8
@@ -636,11 +636,11 @@ def SET_VSCP_MULTICAST_TYPE( type, encryption ) :
 
 # Get packet type part of multicast packet type
 def GET_VSCP_MULTICAST_PACKET_TYPE( type) :   
-    return ( ( type >> 4 ) & 0x0f )
+    return ( ( type >> 4 ) & int('0x0f',16) )
 
 # Get encryption part if multicast packet type
 def GET_VSCP_MULTICAST_PACKET_ENCRYPTION( type ) :     
-    return ( ( type ) & 0x0f )
+    return ( ( type ) & int('0x0f',16) )
 
 # Get data coding type
 def VSCP_DATACODING_TYPE( b ) :
@@ -665,7 +665,7 @@ class guid:
         self.clear()
 
     def getArrayFromString(self, guidstr):
-        g = tuple(int(z,16) for z in guidstr.split(':'))
+        g = tuple(int(z,16) for z in guidstr.split(':',16))
         return ((c_ubyte * 16)(*g))
 
     def setFromString(self, guidstr):
@@ -703,15 +703,15 @@ class guid:
         return ((self.guid[14]<<8) + self.guid[15])
 
     def setNicknameID(self,nicknameid):
-        self.guid[14] = ((nicknameid >> 8) & 0xff)
-        self.guid[15] = (nicknameid & 0xff)    
+        self.guid[14] = ((nicknameid >> 8) & int('0xff',16))
+        self.guid[15] = (nicknameid & int('0xff',16))    
 
     def getClientID(self):
         return ((self.guid[12]<<8) + self.guid[13])
 
     def setClientID(self,clientid):
-        self.guid[12] = ((clientid >> 8) & 0xff)
-        self.guid[13] = (clientid & 0xff)
+        self.guid[12] = ((clientid >> 8) & int('0xff',16))
+        self.guid[13] = (clientid & int('0xff',16))
 
     def isSame(self,arr):
         if 16 > len(arr): return False 
@@ -726,7 +726,7 @@ class guid:
     def setGUIDFromMAC(self, id=0):
         self.guid = self.getArrayFromString('FF:FF:FF:FF:FF:FF:FF:FE:' + \
   	                            getmac.get_mac_address().upper() + \
-  	                            ":{0:02X}:{1:02X}".format(int(id/256),id & 0xff))
+  	                            ":{0:02X}:{1:02X}".format(int(id/256),id & int('0xff',16)))
 
 
 
