@@ -70,15 +70,15 @@ VSCP_HEADER_NO_CRC =                    int('0x08',16)    # Don't calculate CRC
 
 VSCP_NO_CRC_CALC =                      int('0x08',16)    # If set no CRC is calculated
 
-VSCP_HEADER16_DUMB                      int('0x8000',16)  # This node is dumb 
-VSCP_HEADER16_IPV6_GUID                 int('0x1000',16)  # GUID is IPv6 address 
+VSCP_HEADER16_DUMB =                    int('0x8000',16)  # This node is dumb 
+VSCP_HEADER16_IPV6_GUID =               int('0x1000',16)  # GUID is IPv6 address 
 
 # Bits 14/13/12 for GUID type 
 VSCP_HEADER16_GUID_TYPE_STANDARD =      int('0x0000',16)  # VSCP standard GUID 
 VSCP_HEADER16_GUID_TYPE_IPV6 =          int('0x1000',16)  # GUID is IPv6 address 
-# https://www.sohamkamani.com/blog/2016/10/05/uuid1-vs-uuid4/ */
+# https://www.sohamkamani.com/blog/2016/10/05/uuid1-vs-uuid4/ 
 VSCP_HEADER16_GUID_TYPE_RFC4122V1 =     int('0x2000',16)      # GUID is RFC 4122 Version 1 
-define VSCP_HEADER16_GUID_TYPE_RFC4122V4 = int('0x3000',16)   # GUID is RFC 4122 Version 4 
+VSCP_HEADER16_GUID_TYPE_RFC4122V4 =     int('0x3000',16)   # GUID is RFC 4122 Version 4 
 
 VSCP_MASK_PRIORITY =                    int('0xE0',16)
 VSCP_MASK_HARDCODED =                   int('0x10',16)
@@ -419,7 +419,7 @@ VSCP_STD_REGISTER_PAGE_SELECT_LSB           =   int('0x93',16)
 # Firmware version
 VSCP_STD_REGISTER_FIRMWARE_MAJOR            =   int('0x94',16)
 VSCP_STD_REGISTER_FIRMWARE_MINOR            =   int('0x95',16)
-VSCP_STD_REGISTER_FIRMWARE_SUBMINOR         =   int('0x96v
+VSCP_STD_REGISTER_FIRMWARE_SUBMINOR         =   int('0x96',16)
 
 VSCP_STD_REGISTER_BOOT_LOADER               =   int('0x97',16)
 VSCP_STD_REGISTER_BUFFER_SIZE               =   int('0x98',16)

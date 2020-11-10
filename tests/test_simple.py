@@ -7,10 +7,9 @@ sys.path.append('..')    # Should be executed from project root folder
 import vscp
 
 def test_success():
-    err = vscp.VSCP_ERROR_ERROR
-    print(err)
-    assert True
-
+    assert vscp.VSCP_ERROR_ERROR == -1
+    assert vscp.VSCP_HEADER_PRIORITY_MASK == 0xE0
+    assert vscp.VSCP_HEADER16_DUMB == 32768
 if __name__ == "__main__":
     test_success()
     print("Everything passed")
