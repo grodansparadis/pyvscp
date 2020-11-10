@@ -32,8 +32,6 @@ import socket
 import sys
 import datetime
 from ctypes import *
-#from vscp import vscp_class
-#from vscp import vscp_type
 
 VSCP_DEFAULT_UDP_PORT =                 33333
 VSCP_DEFAULT_TCP_PORT =                 9598
@@ -707,7 +705,10 @@ class guid:
     def isNULL(self):
         return (0 == sum(self.guid))
 
-
+    def setGUIDFromMac(self, id=0):
+        self.guid = self.getArrayFromString('FF:FF:FF:FF:FF:FF:FF:FE:' + \
+  	                            getmac.get_mac_address().upper() + \
+  	                            ":{0:02X}:{1:02X}".format(int(id/256),id & 0xff))
 
 
 

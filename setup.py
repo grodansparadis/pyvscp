@@ -70,7 +70,8 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    #packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    py_modules=["vscp"],
 
     python_requires='>=3.0',
 
@@ -84,7 +85,8 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         'pythoncrc',
-        'crypto'
+        'crypto',
+        'get-mac'
     ],
 
     # List additional groups of dependencies here (e.g. development
@@ -117,4 +119,6 @@ setup(
             'sample=sample:main',
         ],
     },
+
+
 )
