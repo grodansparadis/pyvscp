@@ -705,7 +705,7 @@ class guid:
     def isNULL(self):
         return (0 == sum(self.guid))
 
-    def setGUIDFromMac(self, id=0):
+    def setGUIDFromMAC(self, id=0):
         self.guid = self.getArrayFromString('FF:FF:FF:FF:FF:FF:FF:FE:' + \
   	                            getmac.get_mac_address().upper() + \
   	                            ":{0:02X}:{1:02X}".format(int(id/256),id & 0xff))
