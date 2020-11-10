@@ -363,7 +363,7 @@ VSCP_DATACODING_STRING        =         0x40
 VSCP_DATACODING_INTEGER       =         0x60
 VSCP_DATACODING_NORMALIZED    =         0x80
 VSCP_DATACODING_SINGLE        =         0xA0  # single precision float
-VSCP_DATACODING_RESERVED1     =         0xC0
+VSCP_DATACODING_DOUBLE        =         0xC0  # double precision float
 VSCP_DATACODING_RESERVED2     =         0xE0
 
 # These bits are coded in the four least significant bits of the first data byte
