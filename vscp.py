@@ -122,8 +122,7 @@ class vscpEventEx(Structure):
 
     def __init__(self):
         self.crc = 0
-        self.obid = 0
-        self.timstamp=0
+        self.obid = 0        
         self.head =0
         dt = datetime.datetime.utcnow()
         self.year=dt.year
@@ -139,6 +138,10 @@ class vscpEventEx(Structure):
         self.sizedata = 0
         for i in (0,VSCP_LEVEL2_MAXDATA-1):
             self.data[i] = 0
+        self.setTimestamp()
+
+    def setTimestamp(self):
+        self.timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
 
     def dump(self):
         print("------------------------------------------------------------------------")
