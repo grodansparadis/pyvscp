@@ -10,6 +10,16 @@ def test_success():
     assert vscp.VSCP_ERROR_ERROR == -1
     assert vscp.VSCP_HEADER_PRIORITY_MASK == 0xE0
     assert vscp.VSCP_HEADER16_DUMB == 32768
+
+def test_guid():
+    g1 = vscp.guid("0F:0E:0D:0C:0B:0A:09:08:07:06:05:04:03:02:01:00")
+    assert isinstance(g1,object) == True
+    print(g1.getAsString())
+    print(g1.guid)
+    g2 = vscp.guid()
+    print(g2.getAsString())
+
 if __name__ == "__main__":
     test_success()
+    test_guid()
     print("Everything passed")

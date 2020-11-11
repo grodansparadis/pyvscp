@@ -98,7 +98,7 @@ VSCP_CAN_ID_HARD_CODED =	            int('0x02000000',16) # Hard coded bit in CA
 VSCP_GUID_MSB =                         0
 VSCP_GUID_LSB =                         15
 
-# Use in assignements as 'a = guidarray(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xAA,0x55)'
+# Use in assignment's as 'a = guidarray(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xAA,0x55)'
 guidarray = c_ubyte * 16
 
 # VSCP event ex structure
@@ -662,8 +662,15 @@ def VSCP_DATACODING_INDEX( b ) :
 
 class guid:
     
-    def __init__(self):
-        self.clear()
+    guid = bytearray([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+
+    def __init__(self,guid = bytearray([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])):
+        if isinstance(guid,str):
+            self.setFromString(guid)
+        elif isinstance(guid,bytearray):     
+            self.guid = guid
+        else :
+            raise "Assigned GUID must be string or bytearray"    
 
     def getArrayFromString(self, guidstr):
         g = tuple(int(z,16) for z in guidstr.split(':',16))
