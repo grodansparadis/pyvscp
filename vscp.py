@@ -180,7 +180,6 @@ class vscpEvent(Structure):
     def __init__(self):
         self.crc = 0
         self.obid = 0
-        self.timstamp=0
         self.head =0
         self.year=0
         self.month=0
@@ -194,7 +193,10 @@ class vscpEvent(Structure):
             self.guid[i] = 0
         self.sizedata = 0
         self.pdata = None
+        self.setTimestamp()
 
+    def setTimestamp(self):
+        self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
                
    
 # Receiving event filter
