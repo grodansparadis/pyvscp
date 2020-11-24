@@ -141,7 +141,7 @@ class vscpEventEx(Structure):
         self.setTimestamp()
 
     def setTimestamp(self):
-        self.timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
+        self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 
     def dump(self):
         print("------------------------------------------------------------------------")

@@ -59,5 +59,4 @@ from vscp import *
 
 which makes it possible ti use the library resources without a prefix. Using the first method is recommended.
 
-
 [filename](./bottom_copyright.md ':include')
