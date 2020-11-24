@@ -181,12 +181,13 @@ class vscpEvent(Structure):
         self.crc = 0
         self.obid = 0
         self.head =0
-        self.year=0
-        self.month=0
-        self.day=0
-        self.hour=0
-        self.minute=0
-        self.second=0
+        dt = datetime.datetime.utcnow()
+        self.year=dt.year
+        self.month=dt.month
+        self.day=dt.day
+        self.hour=dt.hour
+        self.minute=dt.minute
+        self.second=dt.second
         self.vscpclass=0
         self.vscptype=0
         for i in (0,15):
