@@ -12,8 +12,8 @@
 
 * Datatypes and Structures
 
-  * [vscpEvent](vscpevent.md)
-  * [vscpEventEx](vscpeventex.md)
+  * [vscpEvent](./vscpevent.md)
+  * [vscpEventEx](./vscpeventex.md)
   * [vscpEventFilter](vscpeventfilter.md)
   * [VSCPStatistics](vscpstatistics.md) 
   * [VSCPStatus](vscpstatus.md) 
