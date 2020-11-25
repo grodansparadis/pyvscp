@@ -1,6 +1,6 @@
 * Overview
 
-  * [The VSCP helper library](README.md)
+  * [The VSCP library](README.md)
 
 * Using the library
 

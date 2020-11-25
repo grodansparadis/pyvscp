@@ -1,0 +1,2 @@
+# vscpChannelInfo
+
