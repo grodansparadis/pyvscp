@@ -8,3 +8,18 @@ Available on [PyPi](https://pypi.org/project/pyvscp/) Se also [pyvscphelper](htt
 
 Docs are [here](https://grodansparadis.github.io/pyvscp/) 
 
+
+Install with
+
+```bash
+pip3 install pyvscp
+```
+
+Upgrade with
+
+```bash
+pip3 install --upgrade pyvscp
+```
+
+
+

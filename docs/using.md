@@ -20,10 +20,18 @@ pip3 install pyvscp
 ```
 To install in a virtual environment in your current project:
 
+```bash
 mkdir project-name && cd project-name
 python3 -m venv .env
 source .env/bin/activate
 pip3 install pyvscp
+```
+
+Upgrade with
+
+```bash
+pip3 install --upgrade pyvscp
+```
 
 
 ## Install on Windows
@@ -56,7 +64,6 @@ is the standard way to im,port the library. This means that you have to prefix e
 ```python
 from vscp import *
 ```
-
 which makes it possible ti use the library resources without a prefix. Using the first method is recommended.
 
 [filename](./bottom_copyright.md ':include')
