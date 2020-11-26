@@ -33,7 +33,6 @@ import sys
 import getmac
 import datetime
 from ctypes import *
-import json
 
 VSCP_DEFAULT_UDP_PORT =                 33333
 VSCP_DEFAULT_TCP_PORT =                 9598

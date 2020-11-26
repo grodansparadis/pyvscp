@@ -23,7 +23,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.3.8',
+    version='0.3.9',
 
     description='Official VSCP Python package',
     long_description=long_description,
@@ -86,8 +86,7 @@ setup(
     install_requires=[
         'pythoncrc',
         'crypto',
-        'get-mac',
-        'json'
+        'get-mac'
     ],
 
     # List additional groups of dependencies here (e.g. development
