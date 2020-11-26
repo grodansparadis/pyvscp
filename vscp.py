@@ -33,6 +33,7 @@ import sys
 import getmac
 import datetime
 from ctypes import *
+import json
 
 VSCP_DEFAULT_UDP_PORT =                 33333
 VSCP_DEFAULT_TCP_PORT =                 9598
@@ -136,26 +137,61 @@ class vscpEventEx(Structure):
         for i in (0,15):
             self.guid[i] = 0
         self.sizedata = 0
-        for i in (0,VSCP_LEVEL2_MAXDATA-1):
-            self.data[i] = 0
+        for i in range(VSCP_LEVEL2_MAXDATA) :
+           self.data[0] = 0;  
         self.setTimestamp()
 
     def setTimestamp(self):
         self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 
+    # 2013-11-02T12:34:22Z
+    def getIsoDateTime(self):
+        return "{0:04n}-{1:02}-{2:02}T{1:02}:{2:02}:{2:02}Z".format(self.year, 
+                                                                        self.month, 
+                                                                        self.day, 
+                                                                        self.hour, 
+                                                                        self.minute, 
+                                                                        self.second)
+
+    def getGuidStr(self):
+        return "{0:02X}:{1:02X}:{2:02X}:{3:02X}:{4:02X}:{5:02X}:{6:02X}:{7:02X}:{8:02X}:{9:02X}:{10:02X}:{11:02X}:{12:02X}:{13:02X}:{14:02X}:{15:02X}".format(
+                            self.guid[0],self.guid[1],self.guid[2],self.guid[3],
+                            self.guid[4],self.guid[5],self.guid[6],self.guid[7],
+                            self.guid[8],self.guid[9],self.guid[10],self.guid[11],
+                            self.guid[12],self.guid[13],self.guid[14],self.guid[15] )    
+
+    def toJSON(self):
+
+        a = []
+        if self.sizedata :
+            a = [0]*self.sizedata
+            for i in range(self.sizedata) :
+                a[i] = self.data[i]
+        
+        return {
+            "vscpHead": self.head,
+            "vscpObId": self.obid,
+            "vscpDateTime": self.getIsoDateTime(),
+            "vscpTimeStamp":self.timestamp,
+            "vscpClass": self.vscpclass,
+            "vscpType": self.vscptype,
+            "vscpGuid": self.getGuidStr(),
+            "vscpData": a
+        }
+
     def dump(self):
         print("------------------------------------------------------------------------")
         print("Dump of vscpEventEx content")
-        print(" %04d-%02d-%02d %02d:%02d:%02d UTC Timestamp=%08X" % (self.year,self.month, self.day, self.hour, self.minute, self.second, self.timestamp))
+        print(" %04d-%02d-%02dT%02d:%02d:%02dZ UTC Timestamp=%08X" % (self.year,self.month, self.day, self.hour, self.minute, self.second, self.timestamp))
         print(" head=%04X class=%d type=%d size=%d" % (self.head, self.vscpclass, self.vscptype, self.sizedata ) )
         if self.sizedata > 0:
             out = "Data = "
             for i in range(0,self.sizedata):
-                out += "%02X " % self.data[i] 
+                out += "0:02X ".format(self.data[i])
             print(out)    
         else:
             print("No data.")
-        print("crc=%04X obid=%08X" % (self.crc, self.obid))
+        print("crc={0:04X} obid={1:08X}".format(self.crc, self.obid))
         print("------------------------------------------------------------------------") 
 
 # VSCP event structure  (!!!!! Use vscpEventEx !!!!!)
@@ -199,6 +235,41 @@ class vscpEvent(Structure):
     def setTimestamp(self):
         self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 
+    # 2013-11-02T12:34:22Z
+    def getIsoDateTime(self):
+        return "{0:04n}-{1:02}-{2:02}T{1:02}:{2:02}:{2:02}Z".format(self.year, 
+                                                                        self.month, 
+                                                                        self.day, 
+                                                                        self.hour, 
+                                                                        self.minute, 
+                                                                        self.second)
+
+    def getGuidStr(self):
+        return "{0:02X}:{1:02X}:{2:02X}:{3:02X}:{4:02X}:{5:02X}:{6:02X}:{7:02X}:{8:02X}:{9:02X}:{10:02X}:{11:02X}:{12:02X}:{13:02X}:{14:02X}:{15:02X}".format(
+                            self.guid[0],self.guid[1],self.guid[2],self.guid[3],
+                            self.guid[4],self.guid[5],self.guid[6],self.guid[7],
+                            self.guid[8],self.guid[9],self.guid[10],self.guid[11],
+                            self.guid[12],self.guid[13],self.guid[14],self.guid[15] )    
+
+    def toJSON(self):
+
+        a = []
+        if self.sizedata :
+            a = [0]*self.sizedata
+            for i in range(self.sizedata) :
+                a[i] = self.pdata[i]
+        
+        return {
+            "vscpHead": self.head,
+            "vscpObId": self.obid,
+            "vscpDateTime": self.getIsoDateTime(),
+            "vscpTimeStamp":self.timestamp,
+            "vscpClass": self.vscpclass,
+            "vscpType": self.vscptype,
+            "vscpGuid": self.getGuidStr(),
+            "vscpData": a
+        }
+    
     def dump(self):
         print("------------------------------------------------------------------------")
         print("Dump of vscpEvent content")
@@ -587,17 +658,17 @@ VSCP_XML_EVENT_TEMPLATE = "<event\n"\
 #    "vscpNote": "This is some text"
 #
 #
-VSCP_JSON_EVENT_TEMPLATE = "{\n"\
-    "\"vscpHead\": %d,\n"\
-    "\"vscpObId\":  %lu,\n"\
-    "\"vscpDateTime\": \"%s\",\n"\
-    "\"vscpTimeStamp\": %lu,\n"\
-    "\"vscpClass\": %d,\n"\
-    "\"vscpType\": %d,\n"\
-    "\"vscpGuid\": \"%s\",\n"\
-    "\"vscpData\": [%s],\n"\
-    "\"vscpNote\": \"%s\"\n"\
-"}"
+VSCP_JSON_EVENT_TEMPLATE = {
+    "vscpHead": 0,
+    "vscpObId":  0,
+    "vscpDateTime": "",
+    "vscpTimeStamp": 0,
+    "vscpClass": 0,
+    "vscpType": 0,
+    "vscpGuid": "00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00",
+    "vscpData": [],
+    "vscpNote": ""
+}
 
 #
 # 
@@ -755,6 +826,8 @@ class guid:
         self.guid = self.getArrayFromString('FF:FF:FF:FF:FF:FF:FF:FE:' + \
   	                            getmac.get_mac_address().upper() + \
   	                            ":{0:02X}:{1:02X}".format(int(id/256),id & int('0xff',16)))
+
+
 
 
 
