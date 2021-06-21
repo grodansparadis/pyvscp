@@ -3,8 +3,10 @@
 # setup.py that excludes installing the "tests" package
 
 import sys
+import datetime
 sys.path.append('..')    # Should be executed from project root folder
 import vscp
+
 
 def test_success():
     assert vscp.VSCP_ERROR_ERROR == -1
@@ -19,7 +21,15 @@ def test_guid():
     g2 = vscp.guid()
     print(g2.getAsString())
 
+def test_setDateTimeNow():
+    ex = vscp.vscpEventEx()
+    ex.setDateTimeNow()
+    print(ex.getIsoDateTime())
+    print("-------------------")
+
 if __name__ == "__main__":
+    print(datetime.datetime.utcnow())
     test_success()
     test_guid()
+    test_setDateTimeNow()
     print("Everything passed")

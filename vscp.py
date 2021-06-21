@@ -151,17 +151,17 @@ class vscpEventEx(Structure):
         self.hour=dt.hour
         self.minute=dt.minute
         self.second=dt.second
-        
+
     # 2013-11-02T12:34:22Z
     def getIsoDateTime(self):
         # Update time to now
-        self.setTimeNow()
-        return "{0:04n}-{1:02}-{2:02}T{1:02}:{2:02}:{2:02}Z".format(year, 
-                                                                        month, 
-                                                                        day, 
-                                                                        hour, 
-                                                                        minute, 
-                                                                        second)    
+        self.setDateTimeNow()
+        return "{0:04n}-{1:02}-{2:02}T{3:02}:{4:02}:{5:02}Z".format(self.year, 
+                                                                        self.month, 
+                                                                        self.day, 
+                                                                        self.hour, 
+                                                                        self.minute, 
+                                                                        self.second)    
     
     def getGuidStr(self):
         return "{0:02X}:{1:02X}:{2:02X}:{3:02X}:{4:02X}:{5:02X}:{6:02X}:{7:02X}:{8:02X}:{9:02X}:{10:02X}:{11:02X}:{12:02X}:{13:02X}:{14:02X}:{15:02X}".format(
@@ -259,7 +259,7 @@ class vscpEvent(Structure):
     def getIsoDateTime(self):
         # Update time to now
         self.setTimeNow()
-        return "{0:04n}-{1:02}-{2:02}T{1:02}:{2:02}:{2:02}Z".format(self.year, 
+        return "{0:04n}-{1:02}-{2:02}T{3:02}:{4:02}:{5:02}Z".format(self.year, 
                                                                         self.month, 
                                                                         self.day, 
                                                                         self.hour, 
