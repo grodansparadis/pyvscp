@@ -143,22 +143,6 @@ class vscpEventEx(Structure):
     def setTimestamp(self):
         self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 
-    # 2013-11-02T12:34:22Z
-    def getIsoDateTime(self):
-        dt = datetime.datetime.utcnow()
-        year=dt.year
-        month=dt.month
-        day=dt.day
-        hour=dt.hour
-        minute=dt.minute
-        second=dt.second
-        return "{0:04n}-{1:02}-{2:02}T{1:02}:{2:02}:{2:02}Z".format(year, 
-                                                                        month, 
-                                                                        day, 
-                                                                        hour, 
-                                                                        minute, 
-                                                                        second)
-
     def setDateTimeNow(self):
         dt = datetime.datetime.utcnow()
         self.year=dt.year
@@ -167,6 +151,17 @@ class vscpEventEx(Structure):
         self.hour=dt.hour
         self.minute=dt.minute
         self.second=dt.second
+        
+    # 2013-11-02T12:34:22Z
+    def getIsoDateTime(self):
+        # Update time to now
+        self.setTimeNow()
+        return "{0:04n}-{1:02}-{2:02}T{1:02}:{2:02}:{2:02}Z".format(year, 
+                                                                        month, 
+                                                                        day, 
+                                                                        hour, 
+                                                                        minute, 
+                                                                        second)    
     
     def getGuidStr(self):
         return "{0:02X}:{1:02X}:{2:02X}:{3:02X}:{4:02X}:{5:02X}:{6:02X}:{7:02X}:{8:02X}:{9:02X}:{10:02X}:{11:02X}:{12:02X}:{13:02X}:{14:02X}:{15:02X}".format(
@@ -250,8 +245,20 @@ class vscpEvent(Structure):
     def setTimestamp(self):
         self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 
+    def setDateTimeNow(self):
+        # Update time to now
+        dt = datetime.datetime.utcnow()
+        self.year=dt.year
+        self.month=dt.month
+        self.day=dt.day
+        self.hour=dt.hour
+        self.minute=dt.minute
+        self.second=dt.second
+
     # 2013-11-02T12:34:22Z
     def getIsoDateTime(self):
+        # Update time to now
+        self.setTimeNow()
         return "{0:04n}-{1:02}-{2:02}T{1:02}:{2:02}:{2:02}Z".format(self.year, 
                                                                         self.month, 
                                                                         self.day, 
@@ -267,7 +274,6 @@ class vscpEvent(Structure):
                             self.guid[12],self.guid[13],self.guid[14],self.guid[15] )    
 
     def toJSON(self):
-
         a = []
         if self.sizedata :
             a = [0]*self.sizedata
