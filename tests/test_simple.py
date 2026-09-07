@@ -3,8 +3,16 @@
 # setup.py that excludes installing the "tests" package
 
 import sys
+import os
+import types
 import datetime
-sys.path.append('..')    # Should be executed from project root folder
+# Make sure the local vscp.py wins over any installed pyvscp
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+try:
+    import getmac  # noqa: F401
+except ImportError:
+    # Stub, only needed by guid.setGUIDFromMAC which is not tested here
+    sys.modules['getmac'] = types.ModuleType('getmac')
 import vscp
 
 
@@ -41,7 +49,7 @@ def test_toString():
     print("-------------------")
 
 if __name__ == "__main__":
-    print(datetime.datetime.utcnow())
+    print(datetime.datetime.now(datetime.timezone.utc))
     test_success()
     test_guid()
     test_setDateTimeNow()

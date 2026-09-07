@@ -27,12 +27,9 @@
 # SOFTWARE.
 
 import time
-import struct
-import socket
-import sys
 import getmac
 import datetime
-from ctypes import *
+from ctypes import Structure, POINTER, c_ubyte, c_uint16, c_uint32, c_ushort, c_ulong
 
 VSCP_DEFAULT_UDP_PORT =                 33333
 VSCP_DEFAULT_TCP_PORT =                 9598
@@ -124,7 +121,7 @@ class vscpEventEx(Structure):
         self.crc = 0
         self.obid = 0        
         self.head =0
-        dt = datetime.datetime.utcnow()
+        dt = datetime.datetime.now(datetime.timezone.utc)
         self.year=dt.year
         self.month=dt.month
         self.day=dt.day
@@ -141,10 +138,27 @@ class vscpEventEx(Structure):
         self.setTimestamp()
 
     def setTimestamp(self):
-        self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+        # Sub second part of current UTC time in microseconds
+        self.timestamp = ( time.time_ns() % 1000000000 ) // 1000
 
     def setDateTimeNow(self):
-        dt = datetime.datetime.utcnow()
+        # Set date (second resolution) + sub second microsecond timestamp
+        dt, self.timestamp = convertNsTimestampToDateTime( time.time_ns() )
+        self.year=dt.year
+        self.month=dt.month
+        self.day=dt.day
+        self.hour=dt.hour
+        self.minute=dt.minute
+        self.second=dt.second
+
+    # 64-bit unix timestamp (ns) built from date + microsecond timestamp
+    def getNsTimestamp(self):
+        dt = datetime.datetime(self.year, self.month, self.day, self.hour, self.minute, self.second)
+        return convertDateTimeToNsTimestamp( dt, self.timestamp )
+
+    # Set date + microsecond timestamp from 64-bit unix timestamp (ns)
+    def setFromNsTimestamp(self, ns_timestamp):
+        dt, self.timestamp = convertNsTimestampToDateTime( ns_timestamp )
         self.year=dt.year
         self.month=dt.month
         self.day=dt.day
@@ -181,8 +195,7 @@ class vscpEventEx(Structure):
         return {
             "vscpHead": self.head,
             "vscpObId": self.obid,
-            "vscpDateTime": self.getIsoDateTime(),
-            "vscpTimeStamp":self.timestamp,
+            "vscpTimestampns": self.getNsTimestamp(),
             "vscpClass": self.vscpclass,
             "vscpType": self.vscptype,
             "vscpGuid": self.getGuidStr(),
@@ -202,8 +215,7 @@ class vscpEventEx(Structure):
               hex(self.vscpclass) + "," + \
               hex(self.vscptype) + "," + \
               hex(self.obid) + "," + \
-              self.getIsoDateTime() + "," + \
-              hex(self.timestamp) + "," + \
+              str(self.getNsTimestamp()) + "," + \
               self.getGuidStr() + "," + \
               self.getDataAsString()
 
@@ -215,7 +227,7 @@ class vscpEventEx(Structure):
         if self.sizedata > 0:
             out = "Data = "
             for i in range(0,self.sizedata):
-                out += "0:02X ".format(self.data[i])
+                out += "{0:02X} ".format(self.data[i])
             print(out)    
         else:
             print("No data.")
@@ -245,7 +257,7 @@ class vscpEvent(Structure):
         self.crc = 0
         self.obid = 0
         self.head =0
-        dt = datetime.datetime.utcnow()
+        dt = datetime.datetime.now(datetime.timezone.utc)
         self.year=dt.year
         self.month=dt.month
         self.day=dt.day
@@ -261,11 +273,27 @@ class vscpEvent(Structure):
         self.setTimestamp()
 
     def setTimestamp(self):
-        self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+        # Sub second part of current UTC time in microseconds
+        self.timestamp = ( time.time_ns() % 1000000000 ) // 1000
 
     def _setDateTimeNow(self):
-        # Update time to now
-        dt = datetime.datetime.utcnow()
+        # Set date (second resolution) + sub second microsecond timestamp
+        dt, self.timestamp = convertNsTimestampToDateTime( time.time_ns() )
+        self.year=dt.year
+        self.month=dt.month
+        self.day=dt.day
+        self.hour=dt.hour
+        self.minute=dt.minute
+        self.second=dt.second
+
+    # 64-bit unix timestamp (ns) built from date + microsecond timestamp
+    def getNsTimestamp(self):
+        dt = datetime.datetime(self.year, self.month, self.day, self.hour, self.minute, self.second)
+        return convertDateTimeToNsTimestamp( dt, self.timestamp )
+
+    # Set date + microsecond timestamp from 64-bit unix timestamp (ns)
+    def setFromNsTimestamp(self, ns_timestamp):
+        dt, self.timestamp = convertNsTimestampToDateTime( ns_timestamp )
         self.year=dt.year
         self.month=dt.month
         self.day=dt.day
@@ -301,8 +329,7 @@ class vscpEvent(Structure):
         return {
             "vscpHead": self.head,
             "vscpObId": self.obid,
-            "vscpDateTime": self.getIsoDateTime(),
-            "vscpTimeStamp":self.timestamp,
+            "vscpTimestampns": self.getNsTimestamp(),
             "vscpClass": self.vscpclass,
             "vscpType": self.vscptype,
             "vscpGuid": self.getGuidStr(),
@@ -322,8 +349,7 @@ class vscpEvent(Structure):
               hex(self.vscpclass) + "," + \
               hex(self.vscptype) + "," + \
               hex(self.obid) + "," + \
-              self.getIsoDateTime() + "," + \
-              hex(self.timestamp) + "," + \
+              str(self.getNsTimestamp()) + "," + \
               self.getGuidStr() + "," + \
               self.getDataAsString()
 
@@ -432,11 +458,11 @@ VSCP_ENCRYPTION_AES128 =                1
 VSCP_ENCRYPTION_AES192 =                2
 VSCP_ENCRYPTION_AES256 =                3
 
-# VSCP Encryption tokens
-VSCP_ENCRYPTION_TOKEN_0 =               ""
-VSCP_ENCRYPTION_TOKEN_1 =               "AES128"
-VSCP_ENCRYPTION_TOKEN_2 =               "AES192"
-VSCP_ENCRYPTION_TOKEN_3 =               "AES256"
+# VSCP Encryption tokens (algorithm names, not secrets)
+VSCP_ENCRYPTION_TOKEN_0 =               ""        # nosec B105
+VSCP_ENCRYPTION_TOKEN_1 =               "AES128"  # nosec B105
+VSCP_ENCRYPTION_TOKEN_2 =               "AES192"  # nosec B105
+VSCP_ENCRYPTION_TOKEN_3 =               "AES256"  # nosec B105
 
 # Packet frame format type = 0
 #      without byte0 and CRC
@@ -671,15 +697,14 @@ VSCP_ERROR_NOT_CONNECTED                    =   54      # There is no connection
 #
 #    Template for VSCP XML event data
 # 
-#    data: datetime,head,obid,datetime,timestamp,class,type,guid,sizedata,data,note
+#    data: head,obid,timestampns,class,type,guid,sizedata,data,note
 #  
 #
 # EXAMPLE
 # <event
 #     vscpHead="3"
 #     vscpObId="1234"
-#     vscpDateTime="2017-01-13T10:16:02"
-#     vscpTimeStamp="50817"
+#     vscpTimestampns="1484302562050817000"
 #     vscpClass="10"
 #     vscpType="6"
 #     vscpGuid="00:00:00:00:00:00:00:00:00:00:00:00:00:01:00:02"
@@ -688,8 +713,7 @@ VSCP_ERROR_NOT_CONNECTED                    =   54      # There is no connection
 VSCP_XML_EVENT_TEMPLATE = "<event\n"\
     "vscpHead=\"%d\"\n"\
     "vscpObId=\"%lu\"\n"\
-    "vscpDateTime=\"%s\"\n"\
-    "vscpTimeStamp=\"%lu\"\n"\
+    "vscpTimestampns=\"%lu\"\n"\
     "vscpClass=\"%d\"\n"\
     "vscpType=\"%d\"\n"\
     "vscpGuid=\"%s\"\n"\
@@ -701,13 +725,12 @@ VSCP_XML_EVENT_TEMPLATE = "<event\n"\
 #
 #  
 #    Template for VSCP JSON event data
-#    data: datetime,head,obid,datetime,timestamp,class,type,guid,data,note 
+#    data: head,obid,timestampns,class,type,guid,data,note 
 #  
 #    EXAMPLE
 #    "vscpHead": 2,
 #    "vscpObId"; 123,
-#    "vscpDateTime": "2017-01-13T10:16:02",
-#    "vscpTimeStamp":50817,
+#    "vscpTimestampns": 1484302562050817000,
 #    "vscpClass": 10,
 #    "vscpType": 8,
 #    "vscpGuid": "00:00:00:00:00:00:00:00:00:00:00:00:00:01:00:02",
@@ -718,8 +741,7 @@ VSCP_XML_EVENT_TEMPLATE = "<event\n"\
 VSCP_JSON_EVENT_TEMPLATE = {
     "vscpHead": 0,
     "vscpObId":  0,
-    "vscpDateTime": "",
-    "vscpTimeStamp": 0,
+    "vscpTimestampns": 0,
     "vscpClass": 0,
     "vscpType": 0,
     "vscpGuid": "00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00",
@@ -731,7 +753,7 @@ VSCP_JSON_EVENT_TEMPLATE = {
 # 
 #    Template for VSCP HTML event data  
 #   
-#    data: datetime,class,type,data-count,data,guid,head,timestamp,obid,note
+#    data: class,type,data-count,data,guid,head,timestampns,obid,note
 # 
 #<h2>VSCP Event</h2>
 #<p>
@@ -750,8 +772,7 @@ VSCP_JSON_EVENT_TEMPLATE = {
 #</p>
 #<p>
 #    Head: 6 <br>
-#    DateTime: 2013-11-02T12:34:22Z
-#    Timestamp: 1234 <br>
+#    Timestampns: 1383395662000001234 <br>
 #    obid: 1234 <br>
 #    note: This is a note <br>
 #</p>
@@ -772,24 +793,23 @@ VSCP_HTML_EVENT_TEMPLATE = "<h2>VSCP Event</h2> "\
     "<p>"\
     "Head: %d <br>"\
     "<p>"\
-    "DateTime: %s <br>"\
+    "Timestampns: %lu <br>"\
     "</p>"\
-    "Timestamp: %lu <br>"\
     "obid: %lu <br>"\
     "note: %s <br>"\
     "</p>"
 
 # Set packet type part of multicast packet type
-def SET_VSCP_MULTICAST_TYPE( type, encryption ) :     
-    return ( ( type << 4 ) | encryption )
+def SET_VSCP_MULTICAST_TYPE( pkttype, encryption ) :     
+    return ( ( pkttype << 4 ) | encryption )
 
 # Get packet type part of multicast packet type
-def GET_VSCP_MULTICAST_PACKET_TYPE( type) :   
-    return ( ( type >> 4 ) & int('0x0f',16) )
+def GET_VSCP_MULTICAST_PACKET_TYPE( pkttype ) :   
+    return ( ( pkttype >> 4 ) & int('0x0f',16) )
 
 # Get encryption part if multicast packet type
-def GET_VSCP_MULTICAST_PACKET_ENCRYPTION( type ) :     
-    return ( ( type ) & int('0x0f',16) )
+def GET_VSCP_MULTICAST_PACKET_ENCRYPTION( pkttype ) :     
+    return ( ( pkttype ) & int('0x0f',16) )
 
 # Get data coding type
 def VSCP_DATACODING_TYPE( b ) :
@@ -806,13 +826,16 @@ def VSCP_DATACODING_INDEX( b ) :
 # Convert a 64-bit unix timestamp with nanosecond resolution to a UTC
 # datetime (second resolution) + a timestamp in microseconds (sub second part).
 # Returns tuple (datetime, timestamp)
+# dt, ts = vscp.convertNsTimestampToDateTime(time.time_ns())
 def convertNsTimestampToDateTime( ns_timestamp ) :
-    dt = datetime.datetime.utcfromtimestamp( ns_timestamp // 1000000000 )
+    # Naive UTC datetime (utcfromtimestamp is deprecated)
+    dt = datetime.datetime.fromtimestamp( ns_timestamp // 1000000000, datetime.timezone.utc ).replace( tzinfo=None )
     timestamp = ( ns_timestamp % 1000000000 ) // 1000
     return ( dt, timestamp )
 
 # Convert a UTC datetime (second resolution) + a timestamp in microseconds
 # (sub second part) to a 64-bit unix timestamp with nanosecond resolution
+# ns = vscp.convertDateTimeToNsTimestamp(dt, ts)
 def convertDateTimeToNsTimestamp( dt, timestamp = 0 ) :
     seconds = int( ( dt.replace(microsecond=0) - datetime.datetime(1970, 1, 1) ).total_seconds() )
     return seconds * 1000000000 + timestamp * 1000
@@ -832,11 +855,72 @@ class guid:
         elif isinstance(guid,bytearray):     
             self.guid = guid
         else :
-            raise "Assigned GUID must be string or bytearray"    
+            raise TypeError("Assigned GUID must be string or bytearray")
 
+    # Bytes for one colon separated part, tokens may hold more than one byte
+    @staticmethod
+    def _tokensToBytes(part):
+        result = []
+        if part is None:
+            return result
+        part = part.strip(':')
+        if '' == part:
+            return result
+        for tok in part.split(':'):
+            if '' == tok:
+                raise ValueError("Only one fill placeholder is allowed in a GUID string")
+            if len(tok) % 2:
+                tok = '0' + tok
+            for i in range(0, len(tok), 2):
+                result.append(int(tok[i:i+2], 16))
+        return result
+
+    # Parse a GUID string in any of the forms described in the VSCP spec:
+    # - colon form with arbitrary grouping: "FF:FF:...:01", "0102:03aa:44:..."
+    # - "::" (or leading "-:", trailing ":-") as zero fill, "*" as FF fill
+    # - registry/RFC 4122 form: "{FFFFFFFF-FFFF-FFFF-0102-03AABB440130}",
+    #   with or without braces/dashes
+    # - compact hex form, short forms get implicit trailing zeros: "001122"
+    # - "-" alone for the all zero (null) GUID
     def getArrayFromString(self, guidstr):
-        g = tuple(int(z,16) for z in guidstr.split(':',16))
-        return ((c_ubyte * 16)(*g))
+        s = guidstr.strip()
+        if '-' == s:
+            return (c_ubyte * 16)()
+        if s.startswith('{') and s.endswith('}'):
+            s = s[1:-1]
+        s = s.replace(',', ':')
+        if s.startswith('-:'):
+            s = ':' + s[1:]     # "-:1:2:3" is zero fill, same as "::1:2:3"
+        if s.endswith(':-'):
+            s = s[:-1] + ':'    # "01:-" is zero fill at end, same as "01::"
+        if '*' in s:
+            left, _, right = s.partition('*')
+            fill = int('0xff',16)
+        elif '::' in s:
+            left, _, right = s.partition('::')
+            fill = 0
+        elif ':' not in s:
+            # Compact/registry form, dashes are just grouping
+            try:
+                g = list(bytes.fromhex(s.replace('-', '')))
+            except ValueError:
+                raise ValueError("Invalid GUID string: " + guidstr)
+            if len(g) > 16:
+                raise ValueError("GUID string holds more than 16 bytes: " + guidstr)
+            return (c_ubyte * 16)(*(g + [0] * (16 - len(g))))
+        else:
+            left, right, fill = s, None, None
+        g = self._tokensToBytes(left)
+        if fill is None:
+            if 16 != len(g):
+                raise ValueError("GUID string must contain 16 bytes: " + guidstr)
+        else:
+            rbytes = self._tokensToBytes(right)
+            pad = 16 - len(g) - len(rbytes)
+            if pad < 0:
+                raise ValueError("GUID string holds more than 16 bytes: " + guidstr)
+            g = g + [fill] * pad + rbytes
+        return (c_ubyte * 16)(*g)
 
     def setFromString(self, guidstr):
         self.guid = self.getArrayFromString(guidstr)
@@ -893,10 +977,10 @@ class guid:
     def isNULL(self):
         return (0 == sum(self.guid))
 
-    def setGUIDFromMAC(self, id=0):
+    def setGUIDFromMAC(self, nicknameid=0):
         self.guid = self.getArrayFromString('FF:FF:FF:FF:FF:FF:FF:FE:' + \
   	                            getmac.get_mac_address().upper() + \
-  	                            ":{0:02X}:{1:02X}".format(int(id/256),id & int('0xff',16)))
+  	                            ":{0:02X}:{1:02X}".format(int(nicknameid/256),nicknameid & int('0xff',16)))
 
 
 
