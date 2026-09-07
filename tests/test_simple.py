@@ -27,9 +27,23 @@ def test_setDateTimeNow():
     print(ex.getIsoDateTime())
     print("-------------------")
 
+def test_toString():
+    ex = vscp.vscpEventEx()
+    ex.setDateTimeNow()
+    ex.head = vscp.VSCP_PRIORITY_NORMAL
+    ex.vscpclass = 10
+    ex.vscptype = 6
+    ex.data[0] = 0x11
+    ex.data[1] = 0x22
+    ex.data[2] = 0x33
+    ex.sizedata = 3
+    print(ex.toString())
+    print("-------------------")
+
 if __name__ == "__main__":
     print(datetime.datetime.utcnow())
     test_success()
     test_guid()
     test_setDateTimeNow()
+    test_toString()
     print("Everything passed")

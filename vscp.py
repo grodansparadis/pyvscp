@@ -6,7 +6,7 @@
 #
 # The MIT License (MIT)
 # 
-# Copyright (c) 2000-2020 Ake Hedman, Grodans Paradis AB <info@grodansparadis.com>
+# Copyright (c) 2000-2026 Ake Hedman and contributors, The VSCP Project <info@vscp.org>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -189,6 +189,24 @@ class vscpEventEx(Structure):
             "vscpData": a
         }
 
+    def getDataAsString(self):
+        s = ""
+        for i in range(self.sizedata) :
+            s += "0x{0:02X}".format(self.data[i])
+            if (i < self.sizedata-1):
+                s += ","
+        return s
+
+    def toString(self):
+      return hex(self.head) + "," + \
+              hex(self.vscpclass) + "," + \
+              hex(self.vscptype) + "," + \
+              hex(self.obid) + "," + \
+              self.getIsoDateTime() + "," + \
+              hex(self.timestamp) + "," + \
+              self.getGuidStr() + "," + \
+              self.getDataAsString()
+
     def dump(self):
         print("------------------------------------------------------------------------")
         print("Dump of vscpEventEx content")
@@ -245,7 +263,7 @@ class vscpEvent(Structure):
     def setTimestamp(self):
         self.timestamp = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 
-    def setDateTimeNow(self):
+    def _setDateTimeNow(self):
         # Update time to now
         dt = datetime.datetime.utcnow()
         self.year=dt.year
@@ -290,7 +308,25 @@ class vscpEvent(Structure):
             "vscpGuid": self.getGuidStr(),
             "vscpData": a
         }
-    
+
+    def getDataAsString(self):
+        s = ""
+        for i in range(self.sizedata) :
+            s += "0x{0:02X}".format(self.data[i])
+            if (i < self.sizedata-1):
+                s += ","
+        return s
+
+    def toString(self):
+      return hex(self.head) + "," + \
+              hex(self.vscpclass) + "," + \
+              hex(self.vscptype) + "," + \
+              hex(self.obid) + "," + \
+              self.getIsoDateTime() + "," + \
+              hex(self.timestamp) + "," + \
+              self.getGuidStr() + "," + \
+              self.getDataAsString()
+
     def dump(self):
         print("------------------------------------------------------------------------")
         print("Dump of vscpEvent content")
@@ -766,6 +802,20 @@ def VSCP_DATACODING_UNIT( b ) :
 # Get data coding sensor index
 def VSCP_DATACODING_INDEX( b ) :
     return ( VSCP_MASK_DATACODING_INDEX & b )
+
+# Convert a 64-bit unix timestamp with nanosecond resolution to a UTC
+# datetime (second resolution) + a timestamp in microseconds (sub second part).
+# Returns tuple (datetime, timestamp)
+def convertNsTimestampToDateTime( ns_timestamp ) :
+    dt = datetime.datetime.utcfromtimestamp( ns_timestamp // 1000000000 )
+    timestamp = ( ns_timestamp % 1000000000 ) // 1000
+    return ( dt, timestamp )
+
+# Convert a UTC datetime (second resolution) + a timestamp in microseconds
+# (sub second part) to a 64-bit unix timestamp with nanosecond resolution
+def convertDateTimeToNsTimestamp( dt, timestamp = 0 ) :
+    seconds = int( ( dt.replace(microsecond=0) - datetime.datetime(1970, 1, 1) ).total_seconds() )
+    return seconds * 1000000000 + timestamp * 1000
 
 
 ################################################################################
