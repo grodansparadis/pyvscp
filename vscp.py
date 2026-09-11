@@ -29,7 +29,7 @@
 import time
 import getmac
 import datetime
-from ctypes import Structure, POINTER, c_ubyte, c_uint16, c_uint32, c_ushort, c_ulong
+from ctypes import Structure, Union, POINTER, c_ubyte, c_uint16, c_uint32, c_uint64, c_ushort, c_ulong
 
 VSCP_DEFAULT_UDP_PORT =                 33333
 VSCP_DEFAULT_TCP_PORT =                 9598
@@ -98,19 +98,30 @@ VSCP_GUID_LSB =                         15
 # Use in assignment's as 'a = guidarray(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xAA,0x55)'
 guidarray = c_ubyte * 16
 
-# VSCP event ex structure
-class vscpEventEx(Structure):
-    
-    _fields_ = [("crc", c_uint16),
-                ("obid", c_uint32),                          
-                ("year", c_uint16),
-                ("month", c_ubyte),
-                ("day", c_ubyte),
+# Date/time + relative timestamp part of the event time block
+class _vscpEventDateTime(Structure):
+    _fields_ = [("day", c_ubyte),
                 ("hour", c_ubyte),
                 ("minute", c_ubyte),
                 ("second", c_ubyte),
-                ("timestamp", c_uint32),
-                ("head", c_uint16),
+                ("timestamp", c_uint32)]
+
+# Time block union (frame version 1 uses timestamp_ns)
+class _vscpEventTimeBlock(Union):
+    _anonymous_ = ("_dt",)
+    _fields_ = [("timestamp_ns", c_uint64),
+                ("_dt", _vscpEventDateTime)]
+
+# VSCP event ex structure
+class vscpEventEx(Structure):
+
+    _anonymous_ = ("_time",)
+    _fields_ = [("head", c_uint16),
+                ("obid", c_uint32),
+                ("year", c_uint16),
+                ("month", c_ubyte),
+                ("_time", _vscpEventTimeBlock),
+                ("crc", c_uint16),
                 ("vscpclass", c_uint16),
                 ("vscptype", c_uint16),
                 ("guid", c_ubyte * 16),
@@ -237,21 +248,18 @@ class vscpEventEx(Structure):
 # VSCP event structure  (!!!!! Use vscpEventEx !!!!!)
 class vscpEvent(Structure):
 
-    _fields_ = [("crc", c_uint16),
-                ("obid", c_uint32),                          
+    _anonymous_ = ("_time",)
+    _fields_ = [("head", c_uint16),
+                ("obid", c_uint32),
                 ("year", c_uint16),
                 ("month", c_ubyte),
-                ("day", c_ubyte),
-                ("hour", c_ubyte),
-                ("minute", c_ubyte),
-                ("second", c_ubyte),
-                ("timestamp", c_uint32),
-                ("head", c_uint16),
+                ("_time", _vscpEventTimeBlock),
                 ("vscpclass", c_uint16),
                 ("vscptype", c_uint16),
                 ("guid", c_ubyte * 16),
                 ("sizedata", c_uint16),
-                ("pdata", POINTER(c_ubyte))]                
+                ("pdata", POINTER(c_ubyte)),
+                ("crc", c_uint16)]                
 
     def __init__(self):
         self.crc = 0
