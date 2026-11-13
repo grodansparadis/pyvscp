@@ -7,6 +7,7 @@ tagged, rename **Unreleased** to the version and date, and start a new
 
 ## Unreleased
 
+- Add scripts/download-artifacts.sh to download and verify the newest CI build artifacts
 - Updated defs to align with current (2f1bde3)
 - Added packet publish workflow (b9ae98b)
 - Updated version (b1b9f04)
